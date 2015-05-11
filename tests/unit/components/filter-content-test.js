@@ -35,7 +35,7 @@ var testObj = {
 // properties
 // ---------------------
 
-test('content', function(assert) {
+test('properties/content', function(assert) {
 
   assert.expect(1);
 
@@ -55,7 +55,7 @@ test('content', function(assert) {
   });
 });
 
-test('filterableContent', function(assert) {
+test('properties/filterableContent', function(assert) {
 
   assert.expect(1);
 
@@ -75,7 +75,7 @@ test('filterableContent', function(assert) {
   });
 });
 
-test('filterableProperties', function(assert) {
+test('properties/filterableProperties', function(assert) {
 
   assert.expect(6);
 
@@ -136,10 +136,10 @@ test('filterableProperties', function(assert) {
   });
 });
 
-// todo: bugs?
-test('filterableQuery', function(assert) {
+// todo: bug causes "global failure"
+test('properties/filterableQuery', function(assert) {
 
-  assert.expect(1);
+  assert.expect(2);
 
   var component = this.subject();
 
@@ -160,19 +160,19 @@ test('filterableQuery', function(assert) {
     //   set on destroyed object", "Uncaught TypeError: Cannot read property
     //   'filter' of null" or other issues elsewhere in other tests
 
-    // component.set('query', 'test\\query');
+    component.set('query', 'test\\query');
 
-    // assert.equal(
-    //   component.get('filterableQuery'),
-    //   'testquery',
-    //   'passed value is sanitized');
+    assert.equal(
+      component.get('filterableQuery'),
+      'testquery',
+      'passed value is sanitized');
 
     // ----------
 
   });
 });
 
-test('filterProperties', function(assert) {
+test('properties/filterProperties', function(assert) {
 
   assert.expect(1);
 
@@ -206,11 +206,11 @@ test('filterProperties', function(assert) {
 
 // applyFilter
 // applys the relevant filtering technique for the content type
-// todo: consider writing a test for this to ensure each content type is correctly
-//   filtered
+// todo: consider writing a test for this to ensure each `content` type is
+//   correctly filtered
 
 // todo: failures
-test('getValueAtIndex', function(assert) {
+test('methods/getValueAtIndex', function(assert) {
 
   assert.expect(7);
 
@@ -268,7 +268,7 @@ test('getValueAtIndex', function(assert) {
   });
 });
 
-test('getItemProperty', function(assert) {
+test('methods/getItemProperty', function(assert) {
 
   assert.expect(4);
 
@@ -303,7 +303,7 @@ test('getItemProperty', function(assert) {
   });
 });
 
-test('isDS', function(assert) {
+test('methods/isDS', function(assert) {
 
   assert.expect(5);
 
@@ -339,7 +339,7 @@ test('isDS', function(assert) {
 });
 
 // todo: failures
-test('isEmberObj', function(assert) {
+test('methods/isEmberObj', function(assert) {
 
   assert.expect(5);
 
@@ -376,7 +376,7 @@ test('isEmberObj', function(assert) {
 });
 
 // todo: failures
-test('isMatch', function(assert) {
+test('methods/isMatch', function(assert) {
 
   assert.expect(1);
 
@@ -417,5 +417,7 @@ test('isMatch', function(assert) {
 });
 
 // setFilterableContent
+// externally fired
 
 // setFilterType
+// externally fired
