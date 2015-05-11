@@ -1,7 +1,8 @@
 {
-  "name": "filter-content",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "ember-cli-filter-content": "0.0.1",
+  "name": "ember-cli-filter-content",
+  "version": "0.0.1",
+  "description": "A simple component used to filter a model based on user input.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -37,7 +38,8 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.0.0"
+    "ember-cli-babel": "^5.0.0",
+    "ember-cli-htmlbars": "0.7.4"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
