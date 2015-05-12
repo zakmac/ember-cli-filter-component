@@ -1,6 +1,5 @@
 {
-  "ember-cli-filter-content": "0.0.1",
-  "name": "ember-cli-filter-content",
+  "name": "ember-cli-filter-component",
   "version": "0.0.1",
   "description": "A simple component used to filter a model based on user input.",
   "directories": {
