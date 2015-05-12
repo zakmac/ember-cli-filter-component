@@ -9,7 +9,7 @@ moduleForComponent('filter-content', {});
 
 var dsObj = DS.Model.extend({});
 var emberArr = Ember.ArrayProxy.create({ content: Ember.A([1, 2, 3]) });
-var emberObj = Ember.Object.extend({});
+var emberObj = Ember.Object.create({});
 var literalObj = {};
 var literalArr = [];
 var testObj = {
@@ -197,6 +197,7 @@ test('properties/filterProperties', function(assert) {
 
 // changedContent
 // observes `content` and fires internal methods
+// todo: integration test
 
 // debounceFilter
 // debounces running `applyFilter` on update of `query`
@@ -206,10 +207,8 @@ test('properties/filterProperties', function(assert) {
 
 // applyFilter
 // applys the relevant filtering technique for the content type
-// todo: consider writing a test for this to ensure each `content` type is
-//   correctly filtered
+// todo: integration test
 
-// todo: failures
 test('methods/getValueAtIndex', function(assert) {
 
   assert.expect(7);
@@ -222,45 +221,41 @@ test('methods/getValueAtIndex', function(assert) {
 
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'arrVal'),
-      [['A', 'B', 'C']],
-      'able to select `arrVal.@each`');
+      ['A', 'B', 'C'],
+      'able to select `arrVal`');
 
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'intVal'),
-      [1],
+      1,
       'able to select `intVal`');
 
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'strVal'),
-      ['dos'],
+      'dos',
       'able to select `strVal`');
 
     // ----------
 
     // get nested values
 
-    // todo: this fails
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'objValA.arrVal.@each'),
       ['X', 'Y', 'Z'],
       'able to select `objValA.arrVal.@each`');
 
-    // todo: this fails
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'objValA.objVal.one'),
-      [1],
+      1,
       'able to select `objValA.objVal.one`');
 
-    // todo: this fails
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'objValA.intVal'),
-      [3825],
+      3825,
       'able to select `objValA.intVal`');
 
-    // todo: this fails
     assert.deepEqual(
       component.getValueAtIndex(testObj, 'objValA.strVal'),
-      ['a string'],
+      'a string',
       'able to select `objValA.strVal`');
 
     // ----------
@@ -338,18 +333,16 @@ test('methods/isDS', function(assert) {
   });
 });
 
-// todo: failures
 test('methods/isEmberObj', function(assert) {
 
   assert.expect(5);
 
   var component = this.subject();
 
-  // check if objects are Ember.Object
-
   Ember.run(function() {
 
-    // todo: this fails
+    // check if objects are Ember.Object
+
     assert.ok(
       component.isEmberObj(emberObj),
       'Ember.Object passes');
@@ -375,41 +368,59 @@ test('methods/isEmberObj', function(assert) {
   });
 });
 
-// todo: failures
 test('methods/isMatch', function(assert) {
 
-  assert.expect(1);
+  assert.expect(10);
 
   var component = this.subject();
 
   Ember.run(function() {
 
+    // check mismatches
+
+    assert.ok(
+      !component.isMatch(true, false),
+      'mismatch {boolean} do not match');
+
+    assert.ok(
+      !component.isMatch(0, 1),
+      'mismatch {integer} do not match');
+
+    assert.ok(
+      !component.isMatch('yes', 'no'),
+      'mismatch {string} do not match');
+
+    // ----------
+
     // check matches
 
     assert.ok(
       component.isMatch(true, true),
-      'true booleans match');
+      'true {boolean} match');
 
-    // todo: this fails
     assert.ok(
       component.isMatch(false, false),
-      'false booleans match');
+      'false {boolean} match');
 
     assert.ok(
       component.isMatch(1, 1),
-      'integers match');
+      '{integer} match');
 
     assert.ok(
       component.isMatch('1', '1'),
-      'integer strings match');
+      'integer {string} match');
+
+    assert.ok(
+      component.isMatch(1, '1'),
+      '{integer} and integer {string} match');
 
     assert.ok(
       component.isMatch('test string', 'test string'),
-      'identical strings match');
+      '{string} match');
 
     assert.ok(
       component.isMatch('TEST STRING', 'test string'),
-      'case-mismatched strings match');
+      'case-mismatched {string} match');
 
     // ----------
 
@@ -417,7 +428,7 @@ test('methods/isMatch', function(assert) {
 });
 
 // setFilterableContent
-// externally fired
+// todo: integration test
 
 // setFilterType
-// externally fired
+// todo: integration test
