@@ -1,3 +1,5 @@
+### **Current status:** broken, non-functional
+
 # ember-cli-filter-component
 
 `ember-cli-filter-component` adds a `{{filter-content}}` component to your project. The component filters an array passed into it using a text input included above it's `yield`ed conent. Items matching the filter query are available via the `model` property on the component. Call the component in block form and iterate it's content from
@@ -52,7 +54,7 @@ model: [{
 
 #### Filter an object inside an array
 ```handlebars
-{{filter-content content=model properties="bill.@each.name coins.@each.name"}}
+{{filter-content content=model properties="bills.@each.name coins.@each.name"}}
 ```
 ```javascript
 model: [{
@@ -80,15 +82,11 @@ filterProperty: Ember.computed('propertyToggle', function() {
     return this.get('propertyToggle') ? 'name.longForm' : 'name.code';
 }),
 model: [{
-    "rank": 1,
     "name": {
         "longForm": "Hartsfield–Jackson Atlanta International Airport",
         "code": "ATL"
     },
-    "location": {
-        "city": "Atlanta",
-        "state": "GA"
-    }
+    "location": "Atlanta, GA"
 }],
 filterToggle: true,
 actions: {
@@ -101,9 +99,9 @@ actions: {
 #### Make the UI a little friendlier
 
 ```handlebars
-{{#filter-content content=model properties=filterProperty as |fc|}}
+{{#filter-content content=model properties="firstName"}}
     <small>
-        Showing {{fc.model.length}}/{{fc.content.length}} items matching:
+        Showing {{fc.model.length}}/{{fc.content.length}} people matching:
         <strong>"{{fc.query}}"</strong>
     </small>
     {{! each item in fc.model ... }}
@@ -112,7 +110,7 @@ actions: {
 
 ## Contributing
 
-The more the merrier. Please submit any PRs against the `feature` branch.
+The more the merrier. **Please submit any PRs against** [__the__ `feature` __branch__](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
 
 --- 
 <small>
