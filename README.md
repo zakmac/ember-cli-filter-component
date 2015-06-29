@@ -1,25 +1,123 @@
-# Filter-content
+# ember-cli-filter-component
 
-This README outlines the details of collaborating on this Ember addon.
+`ember-cli-filter-component` adds a `{{filter-content}}` component to your project. The component filters an array passed into it using a text input included above it's `yield`ed conent. Items matching the filter query are available via the `model` property on the component. Call the component in block form and iterate it's content from
 
-## Installation
+## filter-content
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+There are some options that need set in order for `filter-content` to do it's thing.
 
-## Running
+#### content
+The array of items being filtered.
+```handlebars
+{{filter-content content=model}}
+```
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+#### properties
+Properties on each item to filter.
+* Accepts a space-delimited string.
+* Specify `@each` to iterate an array.
+```handlebars
+{{filter-content content=model properties="title category.@each"}}
+```
 
-## Running Tests
+## Examples
 
-* `ember test`
-* `ember test --server`
+#### Filter an array of strings
+```handlebars
+{{! filter by a specific item }}
+{{filter-content content=model properties="1"}}
+```
+```handlebars
+{{! filter by all items }}
+{{filter-content content=model properties="@each"}}
+```
+```javascript
+model: [
+    [ '#00FFFF', 'Aqua' ],
+    [ '#FFE4B5', 'Moccasin' ],
+    [ '#708090', 'SlateGray' ]
+]
+```
 
-## Building
+#### Filter a nested array
+```handlebars
+{{filter-content content=model properties="title category.@each"}}
+```
+```javascript
+model: [{
+    'title': 'A Partridge in a Pear Tree',
+    'category': ['vegetation', 'food', 'avian']
+}]
+```
 
-* `ember build`
+#### Filter an object inside an array
+```handlebars
+{{filter-content content=model properties="bill.@each.name coins.@each.name"}}
+```
+```javascript
+model: [{
+    bills: [{
+        count: 4,
+        name: 'dollar bill'
+        value: 100
+    }],
+    coins: [{
+        count: 2,
+        name: 'dime',
+        value: 10
+    }]
+}]
+```
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+#### Toggle `properties`'s value with a button
+```handlebars
+{{#filter-content content=model properties=filterProperty as |fc|}}
+    <button {{action "tp"}}>Change filter type</button>
+{{/filter-content}}
+```
+```javascript
+filterProperty: Ember.computed('propertyToggle', function() {
+    return this.get('propertyToggle') ? 'name.longForm' : 'name.code';
+}),
+model: [{
+    "rank": 1,
+    "name": {
+        "longForm": "Hartsfield–Jackson Atlanta International Airport",
+        "code": "ATL"
+    },
+    "location": {
+        "city": "Atlanta",
+        "state": "GA"
+    }
+}],
+filterToggle: true,
+actions: {
+    tp: function() {
+        this.toggleProperty('filterToggle');
+    }
+}
+```
+
+#### Make the UI a little friendlier
+
+```handlebars
+{{#filter-content content=model properties=filterProperty as |fc|}}
+    <small>
+        Showing {{fc.model.length}}/{{fc.content.length}} items matching:
+        <strong>"{{fc.query}}"</strong>
+    </small>
+    {{! each item in fc.model ... }}
+{{/filter-content}}
+```
+
+## Contributing
+
+The more the merrier. Please submit any PRs against the `feature` branch.
+
+--- 
+<small>
+For more information on using **ember-cli**, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).<br>
+For more information on **Ember.js**, visit [http://www.emberjs.com/](http://www.emberjs.com/).<br>
+Looking for more great Ember addons? Check out [http://www.emberobserver.com/](http://www.emberobserver.com/).<br>
+Check out the Ember.js IRC channel at `#emberjs` on **Freenode IRC** or join the [Ember Community Slack organization](https://ember-community-slackin.herokuapp.com/).
+</small>
