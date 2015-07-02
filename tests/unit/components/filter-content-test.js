@@ -7,187 +7,177 @@ import {
 
 moduleForComponent('filter-content', {});
 
-var dsObj = DS.Model.extend({});
-var emberArr = Ember.ArrayProxy.create({ content: Ember.A([1, 2, 3]) });
-var emberObj = Ember.Object.create({});
-var literalObj = {};
-var literalArr = [];
-var testObj = {
+var typeEmberDSObj = DS.Model.extend({});
+var typeEmberArr = Ember.ArrayProxy.create({ content: Ember.A([]) });
+var typeEmberObj = Ember.Object.create({});
+var typeLiteralObj = {};
+var typeLiteralArr = [];
 
-  arrVal: ['A', 'B', 'C'],
-  intVal: 1,
-  strVal: 'dos',
-  objValA: {
+// initial state
+// ---------------------
 
-    arrVal: ['X', 'Y', 'Z'],
-    objVal: {
+test('initial component state', function(assert) {
 
-      one: 1,
-      two: 2,
-      three: 3
-    },
-    intVal: 3825,
-    strVal: 'a string'
-  },
-  objValB: { prop: 'value' }
-};
+  var component = this.subject();
+
+  Ember.run(function() {
+
+    // ensure all properties have the correct default state
+
+    assert.deepEqual(
+      component.get('content'),
+      [],
+      '`content` === []');
+
+    assert.strictEqual(
+      component.get('properties'),
+      '',
+      '`properties` === ""');
+
+    assert.strictEqual(
+      component.get('query'),
+      '',
+      '`query` === ""');
+
+    // ensure all computed properties have the correct default value
+
+    assert.strictEqual(
+      component.get('fType'),
+      'array',
+      '`fType` === "array" (lowercase req.)');
+
+    assert.deepEqual(
+      component.get('fContent'),
+      [],
+      '`fContent` === []');
+
+    assert.deepEqual(
+      component.get('fProperties'),
+      [],
+      '`fProperties` === []');
+
+  });
+});
 
 // properties
 // ---------------------
+// noop, property values are covered by initial state tests
 
-test('properties/content', function(assert) {
+test('property `content`', function(assert) {
 
-  assert.expect(1);
-
-  var component = this.subject();
-
-  Ember.run(function() {
-
-    // check default value
-
-    assert.strictEqual(
-      component.get('content'),
-      null,
-      'no default value');
-
-    // ----------
-
-  });
+  assert.expect(0);
 });
 
-test('properties/filterableContent', function(assert) {
+test('property `properties`', function(assert) {
 
-  assert.expect(1);
-
-  var component = this.subject();
-
-  Ember.run(function() {
-
-    // check default value
-
-    assert.strictEqual(
-      component.get('filterableContent'),
-      null,
-      'no default value');
-
-    // ----------
-
-  });
+  assert.expect(0);
 });
 
-test('properties/filterableProperties', function(assert) {
+test('property `query`', function(assert) {
 
-  assert.expect(6);
+  assert.expect(0);
+});
+
+// computed properties
+// ---------------------
+
+test('computed property `fProperties`', function(assert) {
 
   var component = this.subject();
+  // var z = null;
 
   Ember.run(function() {
 
-    // check default value
+    // input is sanitized
+    component.set('properties', '!#$%test.subProp^&()/\\');
 
     assert.deepEqual(
-      component.get('filterableProperties'),
-      [''],
-      'no default value');
+      component.get('fProperties'),
+      ['test.subProp'],
+      'passed values have non-[alphanumeric, underscore, period, space, atsymbol] characters removed');
 
-    // ----------
-
-    // input sanitization
-
-    component.set('filterProperties', 'username!#$%^&()/\\');
-
-    assert.deepEqual(
-      component.get('filterableProperties'),
-      ['username'],
-      'passed value is sanitized');
-
-    // ----------
-
-    // ensure filtering a single index works as expected
-
-    component.set('filterProperties', 'username');
+    // filtering by a single index
+    component.set('properties', 'username');
 
     assert.ok(
-      Ember.isArray(component.get('filterableProperties')),
-      'computed property for a single index is {array}');
+      Ember.isArray(component.get('fProperties')),
+      'specifying a single property for `properties` returns {array}');
 
     assert.deepEqual(
-      component.get('filterableProperties'),
+      component.get('fProperties'),
       ['username'],
-      'computed property for a single index is {array}');
+      'returned array matches expectations');
 
-    // ----------
-
-    // ensure filtering a multiple indices works as expected
-
-    component.set('filterProperties', 'username email accessLevel.@each');
+    // filtering by multiple indices
+    component.set('properties', 'username email accessLevel.@each');
 
     assert.ok(
-      Ember.isArray(component.get('filterableProperties')),
-      'rcomputed property for multiple indices is {array}');
+      Ember.isArray(component.get('fProperties')),
+      'specifying multiple properties for `properties` returns {array}');
 
     assert.deepEqual(
-      component.get('filterableProperties'),
+      component.get('fProperties'),
       ['username', 'email', 'accessLevel.@each'],
-      'computed property for multiple indices is {array}');
-
-    // ----------
+      'returned array matches expectations');
 
   });
 });
 
-// todo: bug causes "global failure"
-test('properties/filterableQuery', function(assert) {
-
-  assert.expect(2);
+test('computed property `fQuery`', function(assert) {
 
   var component = this.subject();
 
   Ember.run(function() {
 
-    // check default value
-
-    assert.equal(
-      component.get('filterableQuery'),
-      '',
-      'no default value');
-
-    // ----------
-
     // input sanitization
-
-    // todo: the set() below causes "Uncaught Error: Assertion Failed: calling
-    //   set on destroyed object", "Uncaught TypeError: Cannot read property
-    //   'filter' of null" or other issues elsewhere in other tests
-
     component.set('query', 'test\\query');
 
     assert.equal(
-      component.get('filterableQuery'),
+      component.get('fQuery'),
       'testquery',
-      'passed value is sanitized');
-
-    // ----------
+      'passed value has backslashes removed');
 
   });
 });
 
-test('properties/filterProperties', function(assert) {
-
-  assert.expect(1);
+test('computed properties observe', function(assert) {
 
   var component = this.subject();
+  var z = null;
 
   Ember.run(function() {
 
-    // check default value
+    // changing `content` recomputes observers
+    z = [{thing: 'A'}];
+    component.set('content', z);
 
-    assert.equal(
-      component.get('filterProperties'),
-      '',
-      'no default value');
+    assert.deepEqual(
+      component.get('fContent'),
+      z,
+      'Changing `content` updates `fContent`');
 
-    // ----------
+    assert.strictEqual(
+      component.get('fType'),
+      'array',
+      'Changing `content` updates `fType`');
+
+    // changing `properties` recomputes observers
+    z = 'thing';
+    component.set('properties', z);
+
+    assert.deepEqual(
+      component.get('fProperties'),
+      [z],
+      'Changing `properties` updates `fProperties`');
+
+    // changing `query` recomputes observers
+    z = "A test query";
+    component.set('query', z);
+
+    assert.strictEqual(
+      component.get('fQuery'),
+      z,
+      'Changing `query` updates `fQuery`');
 
   });
 });
@@ -195,240 +185,149 @@ test('properties/filterProperties', function(assert) {
 // observers
 // ---------------------
 
-// changedContent
-// observes `content` and fires internal methods
-// todo: integration test
+test('observer `debounceFilter`', function(assert) {
 
-// debounceFilter
-// debounces running `applyFilter` on update of `query`
+  assert.expect(0);
+});
 
 // methods
 // ---------------------
 
-// applyFilter
-// applys the relevant filtering technique for the content type
-// todo: integration test
+test('method `applyFilter`', function(assert) {
 
-test('methods/getValueAtIndex', function(assert) {
-
-  assert.expect(7);
-
-  var component = this.subject();
-
-  Ember.run(function() {
-
-    // get root level values
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'arrVal'),
-      ['A', 'B', 'C'],
-      'able to select `arrVal`');
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'intVal'),
-      1,
-      'able to select `intVal`');
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'strVal'),
-      'dos',
-      'able to select `strVal`');
-
-    // ----------
-
-    // get nested values
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'objValA.arrVal.@each'),
-      ['X', 'Y', 'Z'],
-      'able to select `objValA.arrVal.@each`');
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'objValA.objVal.one'),
-      1,
-      'able to select `objValA.objVal.one`');
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'objValA.intVal'),
-      3825,
-      'able to select `objValA.intVal`');
-
-    assert.deepEqual(
-      component.getValueAtIndex(testObj, 'objValA.strVal'),
-      'a string',
-      'able to select `objValA.strVal`');
-
-    // ----------
-
-  });
+  assert.expect(0);
 });
 
-test('methods/getItemProperty', function(assert) {
+test('method `containsMatch`', function(assert) {
 
-  assert.expect(4);
-
-  var component = this.subject();
-
-  Ember.run(function() {
-
-    // get values
-
-    assert.deepEqual(
-      component.getItemProperty(testObj, 'arrVal'),
-      [['A', 'B', 'C']],
-      'able to select `arrVal`');
-
-    assert.deepEqual(
-      component.getItemProperty(testObj, 'intVal'),
-      [1],
-      'able to select `intVal`');
-
-    assert.deepEqual(
-      component.getItemProperty(testObj, 'objValB'),
-      [{ prop: 'value' }],
-      'able to select `objValB`');
-
-    assert.deepEqual(
-      component.getItemProperty(testObj, 'strVal'),
-      ['dos'],
-      'able to select `strVal`');
-
-    // ----------
-
-  });
+  assert.expect(0);
 });
 
-test('methods/isDS', function(assert) {
+test('method `enumGet`', function(assert) {
 
-  assert.expect(5);
+  assert.expect(0);
+});
+
+test('method `isDS`', function(assert) {
 
   var component = this.subject();
 
   // check if objects are DS.Model
-
   Ember.run(function() {
 
     assert.ok(
-      component.isDS(dsObj),
-      'DS.Model passes');
+      component.isDS(typeEmberDSObj),
+      'DS.Model returns true');
 
     assert.ok(
-      !component.isDS(emberArr),
-      'Ember.Array fails');
+      !component.isDS(typeEmberArr),
+      'Ember.Array returns false');
 
     assert.ok(
-      !component.isDS(emberObj),
-      'Ember.Object fails');
+      !component.isDS(typeEmberObj),
+      'Ember.Object returns false');
 
     assert.ok(
-      !component.isDS(literalObj),
-      'Object literal fails');
+      !component.isDS(typeLiteralObj),
+      'Object literal returns false');
 
     assert.ok(
-      !component.isDS(literalArr),
-      'Array literal fails');
-
-    // ----------
+      !component.isDS(typeLiteralArr),
+      'Array literal returns false');
 
   });
 });
 
-test('methods/isEmberObj', function(assert) {
-
-  assert.expect(5);
+test('method `isEmberObj`', function(assert) {
 
   var component = this.subject();
 
   Ember.run(function() {
 
     // check if objects are Ember.Object
+    assert.ok(
+      component.isEmberObj(typeEmberObj),
+      'Ember.Object returns true');
 
     assert.ok(
-      component.isEmberObj(emberObj),
-      'Ember.Object passes');
+      !component.isEmberObj(typeEmberDSObj),
+      'DS.Model returns false');
 
     assert.ok(
-      !component.isEmberObj(dsObj),
-      'DS.Model fails');
+      !component.isEmberObj(typeEmberArr),
+      'Ember.Array returns false');
 
     assert.ok(
-      !component.isEmberObj(emberArr),
-      'Ember.Array fails');
+      !component.isEmberObj(typeLiteralObj),
+      'Object literal returns false');
 
     assert.ok(
-      !component.isEmberObj(literalObj),
-      'Object literal fails');
-
-    assert.ok(
-      !component.isEmberObj(literalArr),
-      'Array literal fails');
-
-    // ----------
+      !component.isEmberObj(typeLiteralArr),
+      'Array literal returns false');
 
   });
 });
 
-test('methods/isMatch', function(assert) {
-
-  assert.expect(10);
+test('method `isMatch`', function(assert) {
 
   var component = this.subject();
 
   Ember.run(function() {
 
     // check mismatches
-
     assert.ok(
       !component.isMatch(true, false),
-      'mismatch {boolean} do not match');
+      'true and false do not match');
 
     assert.ok(
       !component.isMatch(0, 1),
-      'mismatch {integer} do not match');
+      '0 and 1 do not match');
 
     assert.ok(
       !component.isMatch('yes', 'no'),
-      'mismatch {string} do not match');
-
-    // ----------
+      '"yes" and "no" do not match');
 
     // check matches
-
     assert.ok(
       component.isMatch(true, true),
-      'true {boolean} match');
+      'true and true match');
 
     assert.ok(
       component.isMatch(false, false),
-      'false {boolean} match');
+      'false and false match');
 
     assert.ok(
       component.isMatch(1, 1),
-      '{integer} match');
+      '1 and 1 match');
 
     assert.ok(
       component.isMatch('1', '1'),
-      'integer {string} match');
+      '"1" and "1" match');
 
     assert.ok(
       component.isMatch(1, '1'),
-      '{integer} and integer {string} match');
+      '1 and "1" and integer {string} match');
 
     assert.ok(
-      component.isMatch('test string', 'test string'),
-      '{string} match');
+      component.isMatch('test', 'test'),
+      '"test" and "test" match');
 
     assert.ok(
-      component.isMatch('TEST STRING', 'test string'),
-      'case-mismatched {string} match');
-
-    // ----------
+      component.isMatch('TEST', 'test'),
+      '"TEST" and "test" match');
 
   });
 });
 
-// setFilterableContent
-// todo: integration test
+test('method `setup`', function(assert) {
 
-// setFilterType
-// todo: integration test
+  assert.expect(0);
+});
+
+// functionality
+// ---------------------
+
+test('filtering works on {array}', function(assert) {
+
+  assert.expect(0);
+});

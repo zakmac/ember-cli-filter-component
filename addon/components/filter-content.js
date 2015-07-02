@@ -22,7 +22,7 @@ export default Ember.Component.extend({
    * @type {(array|object|Ember.Object|Ember.Enumerable|DS.Model)}
    * @instance
    */
-  content: null,
+  content: [],
 
   /**
    * properties
@@ -44,22 +44,74 @@ export default Ember.Component.extend({
    */
   query: '',
 
-  /* observers
+  /* computed properties
   ------------------------ */
 
   /**
-   * debounceFilter
+   * fContent
    *
-   * @description apply the correct filter type to 'fContent' and populate
-   *   'model' with the result
+   * @description an object of known type that we can safely, naively filter
    * @memberof FilterContentComponent
+   * @type {(Ember.ArrayProxy|Ember.Object|Ember.Enumerable|DS.Model)}
    * @instance
    */
-  debounceFilter: Ember.observer('content', 'query', function() {
+  fContent: Ember.computed('content', function() {
 
-    console.log('debounce');
+    console.log('fContent');
 
-    Ember.run.debounce(this, this.applyFilter, 350);
+    var content = this.get('content');
+    // var returns = null;
+    var type = Ember.typeOf(content);
+
+    try {
+
+      if (type === 'array') {
+
+        // coerce returns into Ember.Array
+        return Ember.A(content);
+
+      } else if (type === 'object') {
+
+        // coerce returns into an  Ember.Object
+        return Ember.Object.create(content);
+
+      // could be DS.Model, or junk
+      // if content is an instance that is not an ember.object, take offense
+      } else if (type === 'class') {
+
+        if (isDS(content)) {
+
+          return content;
+
+        } else {
+
+          throw 'Ember.typeOf(content) === class that is not DS';
+        }
+
+      // could be Ember.Object, or junk
+      // if content is an instance that is not an ember.object, take offense
+      } else if (type === 'instance') {
+
+        if (isEmberObj(content)) {
+
+          return content;
+
+        } else {
+
+          throw 'Ember.typeOf(content) === instance that is not Ember';
+        }
+
+      } else {
+
+        throw 'Ember.typeOf(content) === "'+ type +'" is not supported';
+      }
+
+      return null;
+
+    } catch (ex) {
+
+      console.warn('FilterContentComponent.fContent', ex);
+    }
   }),
 
   /**
@@ -121,73 +173,6 @@ export default Ember.Component.extend({
   }),
 
   /**
-   * fContent
-   *
-   * @description an object of known type that we can safely, naively filter
-   * @memberof FilterContentComponent
-   * @type {(Ember.ArrayProxy|Ember.Object|Ember.Enumerable|DS.Model)}
-   * @instance
-   */
-  fContent: Ember.computed('content', function() {
-
-    console.log('fContent');
-
-    var content = this.get('content');
-    var returns = null;
-    var type = Ember.typeOf(content);
-
-    try {
-
-      if (type === 'array') {
-
-        // coerce returns into Ember.Array
-        returns = Ember.A(content);
-
-      } else if (type === 'object') {
-
-        // coerce returns into an  Ember.Object
-        returns = Ember.Object.create(content);
-
-      // could be DS.Model, or junk
-      // if content is an instance that is not an ember.object, take offense
-      } else if (type === 'class') {
-
-        if (isDS(content)) {
-
-          returns = content;
-
-        } else {
-
-          throw 'Ember.typeOf(content) === class that is not DS';
-        }
-
-      // could be Ember.Object, or junk
-      // if content is an instance that is not an ember.object, take offense
-      } else if (type === 'instance') {
-
-        if (isEmberObj(content)) {
-
-          returns = content;
-
-        } else {
-
-          throw 'Ember.typeOf(content) === instance that is not Ember';
-        }
-
-      } else {
-
-        throw 'Ember.typeOf(content) === "'+ type +'" is not supported';
-      }
-
-      return returns;
-
-    } catch (ex) {
-
-      console.warn('FilterContentComponent.fContent', ex);
-    }
-  }),
-
-  /**
    * fProperties
    *
    * @description an array of strings representing the fContent properties
@@ -203,15 +188,20 @@ export default Ember.Component.extend({
     var properties = this.get('properties') || '';
     // anything ![alphanumeric, underscore, period, space, atsymbol]
     var regexA = new RegExp(/[^\w\s@.-]+/g);
-    // one or more spaces
+    // one or more space
     var regexB = new RegExp(/\s+/g);
 
     // cast to string
-    properties = properties.toString();
-    properties = properties.replace(regexA, '');
-    properties = properties.split(regexB);
+    if (properties) {
 
-    return properties;
+      properties = properties.toString();
+      properties = properties.replace(regexA, '');
+      properties = properties.split(regexB);
+
+      return properties;
+    }
+
+    return [];
   }),
 
   /**
@@ -231,9 +221,30 @@ export default Ember.Component.extend({
     var query = this.get('query');
     var regex = new RegExp(/\\+/g);
 
-    query = query.replace(regex, '');
+    if (Ember.isPresent(query)) {
 
-    return query;
+      return query.replace(regex, '');
+    }
+
+    return '';
+  }),
+
+  /* observers
+  ------------------------ */
+
+  /**
+   * debounceFilter
+   *
+   * @description apply the correct filter type to 'fContent' and populate
+   *   'model' with the result
+   * @memberof FilterContentComponent
+   * @instance
+   */
+  debounceFilter: Ember.observer('content', 'query', function() {
+
+    console.log('debounce');
+
+    Ember.run.debounce(this, this.applyFilter, 350);
   }),
 
   /* methods
@@ -248,75 +259,76 @@ export default Ember.Component.extend({
    */
   applyFilter: function() {
 
+    // ensure
+    if (this.get('isDestroyed')) return false;
+
     console.log('apply');
 
     var compare = [];
-    var fContent = null;
-    var fProps = null;
-    var fQuery = null;
-    var fType = null;
+    var fContent = this.get('fContent');
+    var fProps = this.get('fProperties');
+    var fQuery = this.get('fQuery');
+    var fType = this.get('fType');
     var prop = null;
     var returns = null;
     var that = this;
 
-    // done in a separate run loop to avoid issues
-    Ember.run(this, function() {
+    console.log('//------');
+    console.log(fContent, fProps, fQuery, fType);
+    console.log('finishapply', !Ember.isEmpty(fContent), !Ember.isBlank(fQuery), !Ember.isBlank(fProps));
+    console.log('------//');
 
-      fContent = this.get('fContent');
-      fProps = this.get('fProperties');
-      fQuery = this.get('fQuery');
-      fType = this.get('fType');
-    });
+    if (!Ember.isBlank(fContent) && !Ember.isBlank(fQuery) && !Ember.isBlank(fProps)) {
 
-    Ember.run.next(this, function() {
+      if (fType === 'array') {
 
-      console.log('//------');
-      console.log(fContent, fProps, fQuery, fType);
-      console.log('finishapply', !Ember.isEmpty(fContent), !Ember.isBlank(fQuery), !Ember.isBlank(fProps));
-      console.log('------//');
+        console.log('//------');
+        console.log('isArr');
 
-      if (!Ember.isBlank(fContent) && !Ember.isBlank(fQuery) && !Ember.isBlank(fProps)) {
+        // iterate each item passed in `content`
+        returns = Ember.EnumerableUtils.filter(fContent, function(item) {
 
-        if (fType === 'array') {
+          console.log(item);
 
-          console.log('isArr');
+          // check each specified property for a match
+          fProps.forEach(function(prop) {
 
-          // iterate each item passed in `content`
-          returns = Ember.EnumerableUtils.filter(fContent, function(item) {
+            // split the property into its dot string fragments
+            prop = prop.split('.');
 
-            // check each specified property for a match
-            fProps.forEach(function(prop) {
+            prop.forEach(function(propFrag) {
 
-              compare = that.enumGet(item, prop);
-
-              return that.containsMatch(compare, fQuery);
+              compare = that.enumGet(item, propFrag);
             });
 
-            return false;
+            console.log(prop.join('.'), compare);
+
+            return that.containsMatch(compare, fQuery);
           });
 
-        } else {
+        });
 
-          // iterate each item passed in `content`
-          returns = Ember.EnumerableUtils.filter(fContent, function(item) {
+        console.log('------//');
 
-            // check each specified property for a match
-            fProps.forEach(function(prop) {
+      } else {
 
-              compare = this.get(prop);
+        // iterate each item passed in `content`
+        returns = Ember.EnumerableUtils.filter(fContent, function(item) {
 
-              return that.containsMatch(compare, fQuery);
-            });
+          // check each specified property for a match
+          fProps.forEach(function(prop) {
 
-            return false;
+            compare = this.get(prop);
+
+            return that.containsMatch(compare, fQuery);
           });
-        }
+
+          return false;
+        });
       }
+    }
 
-      console.log('ret', returns);
-
-      this.set('model', returns);
-    });
+    this.set('model', returns);
   },
 
   containsMatch: function(arr, query) {
@@ -421,5 +433,14 @@ export default Ember.Component.extend({
     }
 
     return returns;
-  }
+  },
+
+  setup: Ember.on('init', function() {
+
+    // trigger fContent if necessary
+    if (!this.get('content')) {
+
+      this.set('content', []);
+    }
+  })
 });
