@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-  name: 'filter-content'
+  name: 'ember-cli-filter-component'
 };
