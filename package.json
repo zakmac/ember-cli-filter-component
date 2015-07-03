@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "0.0.1",
-  "description": "A simple component used to filter a model based on user input.",
+  "version": "1.0.0-beta",
+  "description": "A simple component used to filter an array based on user input.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,7 +11,10 @@
     "build": "ember build",
     "test": "ember try:testall"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zakmac/ember-cli-filter-component"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
