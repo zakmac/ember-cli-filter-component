@@ -1,5 +1,3 @@
-### **Current status:** broken, non-functional
-
 # ember-cli-filter-component
 
 `ember-cli-filter-component` adds a `{{filter-content}}` component to your project. 
