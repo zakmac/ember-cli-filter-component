@@ -1,4 +1,4 @@
 import Ember from 'ember';
-import FilterContent from 'filter-content/components/filter-content';
+import FilterContent from 'ember-cli-filter-component/components/filter-content';
 
 export default FilterContent;
