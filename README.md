@@ -2,29 +2,33 @@
 
 # ember-cli-filter-component
 
-`ember-cli-filter-component` adds a `{{filter-content}}` component to your project. The component filters an array passed into it using a text input included above it's `yield`ed conent. Items matching the filter query are available via the `model` property on the component. Call the component in block form and iterate it's content from
+`ember-cli-filter-component` adds a `{{filter-content}}` component to your project. 
+- The component filters an array passed into it using a text input included above it's `yield`ed conent.
+- Items matching the filter query are available via the `model` property on the component.
 
-## filter-content
+#### Installation
 
-There are some options that need set in order for `filter-content` to do it's thing.
+From within your project's folder, enter the following command:
 
-#### content
-The array of items being filtered.
+- `ember install ember-cli-filter-component`
+
+## Parameters
+
+**content** – The array of items being filtered.
 ```handlebars
 {{filter-content content=model}}
 ```
 
-#### properties
-Properties on each item to filter.
-* Accepts a space-delimited string.
-* Specify `@each` to iterate an array.
+**properties** – Properties on each item to filter.
+- Accepts a space-delimited string.
+- Specify `@each` to iterate an array.
 ```handlebars
 {{filter-content content=model properties="title category.@each"}}
 ```
 
 ## Examples
 
-#### Filter an array of strings
+**Filter an array of strings**
 ```handlebars
 {{! filter by a specific item }}
 {{filter-content content=model properties="1"}}
@@ -41,7 +45,7 @@ model: [
 ]
 ```
 
-#### Filter a nested array
+**Filter a nested array**
 ```handlebars
 {{filter-content content=model properties="title category.@each"}}
 ```
@@ -52,7 +56,7 @@ model: [{
 }]
 ```
 
-#### Filter an object inside an array
+**Filter an object inside an array**
 ```handlebars
 {{filter-content content=model properties="bills.@each.name coins.@each.name"}}
 ```
@@ -71,7 +75,7 @@ model: [{
 }]
 ```
 
-#### Toggle `properties`'s value with a button
+**Toggle `properties`'s value with a button**
 ```handlebars
 {{#filter-content content=model properties=filterProperty as |fc|}}
     <button {{action "tp"}}>Change filter type</button>
@@ -96,8 +100,7 @@ actions: {
 }
 ```
 
-#### Make the UI a little friendlier
-
+**Make the UI a little friendlier**
 ```handlebars
 {{#filter-content content=model properties="firstName"}}
     <small>
