@@ -5,5 +5,5 @@ languages:
   Python: false
 exclude_paths:
 - "app/*"
-- "config/*"
 - "tests/*"
+- "vendor/*"
