@@ -5,6 +5,10 @@ node_js:
 
 sudo: false
 
+addons:
+  code_climate:
+    repo_token: 55963b59e30ba04314017b8b
+
 cache:
   directories:
     - node_modules
@@ -20,3 +24,6 @@ install:
 
 script:
   - npm test
+
+after_script:
+  - codeclimate < lcov.info
