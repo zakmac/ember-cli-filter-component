@@ -15,11 +15,15 @@ before_install:
 
 install:
   - npm install -g bower
+  # - npm install -g codeclimate-test-reporter
+  # - npm install -g istanbul
+  # - npm install -g mocha
   - npm install
   - bower install
 
 script:
   - npm test
 
-after_script:
-  - codeclimate-test-reporter < lcov.info
+# after_success:
+  # - istanbul cover _mocha -- -R spec ./tests/unit/components/*.js
+  # - codeclimate < ./lcov.info
