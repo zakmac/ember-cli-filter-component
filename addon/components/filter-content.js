@@ -252,18 +252,20 @@ export default Ember.Component.extend({
 
   applyFilter: function() {
 
+    if (this.get('isDestroyed')) { return false; }
+
     var compare = [];
     var compareTemp = [];
     var contentComp = this.get('contentComp');
     var propertiesComp = this.get('propertiesComputed');
     var queryComp = this.get('queryComp');
     // var fType = this.get('fType');
-    var len = propertiesComp.length;
-    var matchFound = false;
+    // var len = propertiesComp.length;
+    // var matchFound = false;
     // var match = false;
     // var prop = null;
     var returns = [];
-    var skip = false;
+    // var skip = false;
     var component = this;
 
     // iterate each item passed in `content`
@@ -273,17 +275,15 @@ export default Ember.Component.extend({
       compareTemp = [];
 
       // check each specified property for a match
-      propertiesComp.forEach(function(prop, z) {
+      propertiesComp.forEach(function(prop) {
 
         if (compare.get) {
 
-          console.log('GET');
           compare = compare.get(prop);
 
         } else {
 
-          console.log('ENUM', compare);
-          compare = component.getFromEnum(compare, prop);
+          compare = component.getFromEnum(Ember.makeArray(compare), prop);
         }
 
         if (compare) {
@@ -292,12 +292,12 @@ export default Ember.Component.extend({
         }
       });
 
-      console.log('COMPARE', compareTemp, queryComp, component.containsMatch(compare, queryComp));
+      // console.log('COMPARE', compareTemp, queryComp, component.containsMatch(compare, queryComp));
 
-      return component.containsMatch(compareTemp, queryComp);
+      return !Ember.isEmpty(compareTemp) && typeof compareTemp[0] === 'string' ? component.containsMatch(compareTemp, queryComp) : false;
     });
 
-    return returns;
+    this.set('model', returns);
   },
 
   containsMatch: function(arr, query) {
@@ -307,21 +307,23 @@ export default Ember.Component.extend({
 
     arr.forEach(function(item) {
 
-      if (!matchFound) {
+      if (!matchFound && that.isMatch(item, query)) {
 
-        console.log('containsmatch arr', arr);
-        console.log(item, query, that.isMatch(item, query));
-
-        if (that.isMatch(item, query)) {
-
-          matchFound = true;
-        }
+        matchFound = true;
       }
     });
 
     return matchFound;
   },
 
+  /**
+   * a poor man's `get` for use on enumerables
+   * - returns a single, root-level value
+   *
+   * @param {array} arr the array being filtered
+   * @param {string} index dot notation of desired property
+   * @returns {array} properties matching specified indices
+   */
   getFromEnum: function(enumerable, property) {
 
     var component = this;
@@ -332,17 +334,21 @@ export default Ember.Component.extend({
     var tempItem = null;
     var tempProperties = properties;
 
-    len = properties.length;
+    len = tempProperties.length;
 
     if (!enumerable) {
 
-      return null;
+      return [];
+
+    } else if (property === '@each') {
+
+      return enumerable;
     }
 
-    // enumerable.forEach(function(item, z) {
+    enumerable.forEach(function(item) {
 
-      tempItem = enumerable;
-      tempProperties = properties;
+      tempItem = item;
+      // tempProperties = properties;
 
       tempProperties.forEach(function(index, y) {
 
@@ -357,6 +363,10 @@ export default Ember.Component.extend({
                 tempItem = Ember.makeArray(tempItem);
                 tempProperties = tempProperties.slice(y + 1, len).join('.');
                 tempItem = component.getFromEnum(tempItem, tempProperties);
+
+              } else {
+
+                tempItem = tempItem;
               }
 
             } else {
@@ -384,71 +394,10 @@ export default Ember.Component.extend({
 
         found = found.concat(tempItem);
       }
-    // });
+    });
 
     return found;
   },
-
-  /**
-   * a poor man's `get` for use on enumerables
-   * - returns a single, root-level value
-   *
-   * @param {array} arr the array being filtered
-   * @param {string} index dot notation of desired property
-   * @returns {array} properties matching specified indices
-   */
-  /*enumGet: function(arr, index) {
-
-    var component = this;
-    var foundItems = [];
-        index = Ember.inspect(index).split('.');
-    var len = index.length;
-    var recursed = false;
-    var returns = arr;
-    var junk = null;
-
-    index.forEach(function(pid, z) {
-
-      if (!recursed) {
-
-        if (pid === '@each') {
-
-          var test = index.slice(z + 1, len).join('.');
-
-          if (z + 1 === len) {
-
-            console.log('SIT:A (@EACH:IS_LAST)');
-            returns = returns;
-
-          } else {
-
-            console.log('SIT:B (@EACH:NOT_LAST), '+ test);
-
-            returns = component.enumGet(returns, test);
-            recursed = true;
-          }
-
-        } else {
-
-          if (returns && returns[pid]) {
-
-            console.log('SIT:C (NOT_@EACH:RETURNS[PID])');
-
-            returns = returns[pid];
-
-          } else {
-
-            console.log('SIT:D (NOT_@EACH:NOT_RETURNS[PID])');
-            returns = [];
-          }
-        }
-      }
-
-      if (returns) { foundItems.push(returns); }
-    });
-
-    return foundItems;
-  },*/
 
   /**
    * isDS
