@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "description": "A simple component used to filter an array based on user input.",
   "directories": {
     "doc": "doc",
@@ -33,9 +33,11 @@
     "ember-cli-qunit": "0.3.10",
     "ember-cli-uglify": "1.0.1",
     "ember-data": "1.0.0-beta.16.1",
-    "ember-export-application-global": "^1.0.2",
     "ember-disable-prototype-extensions": "^1.0.0",
-    "ember-try": "0.0.4"
+    "ember-export-application-global": "^1.0.2",
+    "ember-try": "0.0.4",
+    "phantomjs": "^1.9.17",
+    "qunitjs": "^1.18.0"
   },
   "keywords": [
     "ember-addon",
