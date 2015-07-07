@@ -13,10 +13,10 @@ var typeEmberObj = Ember.Object.create({});
 
 // initial state
 // ---------------------
-/*
+
 test('initial component state', function(assert) {
 
-  assert.expect(5);
+  assert.expect(6);
 
   var component = this.subject();
 
@@ -24,33 +24,32 @@ test('initial component state', function(assert) {
   assert.deepEqual(
     component.get('content'),
     [],
-    '`content` === []');
+    '`content` has an initial value of []');
 
   assert.strictEqual(
     component.get('properties'),
     '',
-    '`properties` === ""');
+    '`properties` has an initial value of ""');
 
   assert.strictEqual(
     component.get('query'),
     '',
-    '`query` === ""');
-
-  // ensure all computed properties have the correct default value
-  // assert.strictEqual(
-  //   component.get('fType'),
-  //   'array',
-  //   '`fType` === "array" (lowercase req.)');
+    '`query` has an initial value of ""');
 
   assert.deepEqual(
-    component.get('contentComp'),
+    component.get('contentComputed'),
     [],
-    '`contentComp` === []');
+    '`contentComputed` initially computes to []');
 
   assert.deepEqual(
     component.get('propertiesComputed'),
     [],
-    '`propertiesComputed` === []');
+    '`propertiesComputed` initially computes to []');
+
+  assert.strictEqual(
+    component.get('queryComputed'),
+    '',
+    '`queryComputed` initially computes to ""');
 });
 
 // properties
@@ -80,7 +79,6 @@ test('computed property `propertiesComputed`', function(assert) {
   assert.expect(5);
 
   var component = this.subject();
-  var z = null;
 
   // input is sanitized
   Ember.run(function() {
@@ -101,12 +99,12 @@ test('computed property `propertiesComputed`', function(assert) {
 
   assert.ok(
     Ember.isArray(component.get('propertiesComputed')),
-    'specifying a single property for `properties` returns {array}');
+    'specifying a single property for `properties` returns a value of type {array}');
 
   assert.deepEqual(
     component.get('propertiesComputed'),
     ['username'],
-    'returned array matches expectations');
+    'returned array contains a single value matching the passed property');
 
   // filtering by multiple indices
   Ember.run(function() {
@@ -116,15 +114,15 @@ test('computed property `propertiesComputed`', function(assert) {
 
   assert.ok(
     Ember.isArray(component.get('propertiesComputed')),
-    'specifying multiple properties for `properties` returns {array}');
+    'specifying multiple properties for `properties` returns a value of type {array}');
 
   assert.deepEqual(
     component.get('propertiesComputed'),
     ['username', 'email', 'accessLevel.@each'],
-    'returned array matches expectations');
+    'returned array contains three entries each matching their passed property');
 });
 
-test('computed property `queryComp`', function(assert) {
+test('computed property `queryComputed`', function(assert) {
 
   assert.expect(1);
 
@@ -137,63 +135,49 @@ test('computed property `queryComp`', function(assert) {
   });
 
   assert.equal(
-    component.get('queryComp'),
+    component.get('queryComputed'),
     'testquery',
-    'passed value has backslashes removed');
+    'returned value has backslashes removed');
 });
-*/
-/*test('computed property `fType`', function(assert) {
 
-  assert.expect(0);
-});*/
-/*
-test('computed properties observe', function(assert) {
+test('computed properties observe their specified targets', function(assert) {
 
   assert.expect(3);
 
   var component = this.subject();
-  var z = null;
 
   // changing `content` recomputes observers
   Ember.run(function() {
 
-    z = [{thing: 'A'}];
-    component.set('content', z);
+    component.set('content', [{thing: 'A'}]);
   });
 
   assert.deepEqual(
-    component.get('contentComp'),
-    z,
-    'Changing `content` updates `contentComp`');
-
-  // assert.strictEqual(
-  //   component.get('fType'),
-  //   'array',
-  //   'Changing `content` updates `fType`');
+    component.get('contentComputed'),
+    [{thing: 'A'}],
+    'Changing `content` updates `contentComputed`');
 
   // changing `properties` recomputes observers
   Ember.run(function() {
 
-    z = 'thing';
-    component.set('properties', z);
+    component.set('properties', 'thing');
   });
 
   assert.deepEqual(
     component.get('propertiesComputed'),
-    [z],
+    ['thing'],
     'Changing `properties` updates `propertiesComputed`');
 
   // changing `query` recomputes observers
   Ember.run(function() {
 
-    z = "A test query";
-    component.set('query', z);
+    component.set('query', 'A test query');
   });
 
   assert.strictEqual(
-    component.get('queryComp'),
-    z,
-    'Changing `query` updates `queryComp`');
+    component.get('queryComputed'),
+    'A test query',
+    'Changing `query` updates `queryComputed`');
 });
 
 // observers
@@ -214,96 +198,67 @@ test('method `applyFilter`', function(assert) {
 
 test('method `containsMatch`', function(assert) {
 
-  assert.expect(0);
+  assert.expect(7);
+
+  var component = this.subject();
+
+  // can match numbers
+  assert.ok(
+    component.arrayContainsMatch([1, 2, 3], '2'),
+    'can match a string containing an integer against an integer');
+
+  assert.ok(
+    component.arrayContainsMatch(['1', '2', '3'], '2'),
+    'can match two strings containing integers against one another');
+
+  assert.ok(
+    component.arrayContainsMatch(['100', '200', '300'], '2'),
+    'can perform a partial match on integers');
+
+  // can match strings
+  assert.ok(
+    component.arrayContainsMatch(['one', 'two', 'three'], 'two'),
+    'can match two strings against one another');
+
+  assert.ok(
+    component.arrayContainsMatch(['one', 'two', 'three'], 'w'),
+    'can perform a partial match on strings');
+
+  // returns false on mismatch
+  assert.ok(
+    !component.arrayContainsMatch(['one', 'two', 'three'], '1'),
+    'does not return a match when there is no match expected');
+
+  assert.ok(
+    !component.arrayContainsMatch(['one', 'two', 'three'], 'onehundred'),
+    'does not return a match when the match would be a substring of the query');
 });
-*/
-/*test('method `enumGet`', function(assert) {
+
+test('method `getFromEnum`', function(assert) {
 
   assert.expect(3);
 
   var component = this.subject();
-  var z = null;
 
   // can get value of a property
   assert.deepEqual(
-    component.enumGet({prop: 'value'}, 'prop'),
-    ['value'],
+    component.getFromEnum([{prop: 'valA'}, {prop: 'valB'}], 'prop'),
+    ['valA', 'valB'],
     'can get the value of an object\'s property');
 
   // can get `@each`
   assert.deepEqual(
-    component.enumGet([1, 2, 3], '@each'),
+    component.getFromEnum([1, 2, 3], '@each'),
     [1, 2, 3],
     'can parse an `@each` selector');
 
   // can get nested properties
-  assert.equal(
-    component.enumGet({prop: {subProp: 'value'}}, 'prop.subProp'),
-    'value',
+  assert.deepEqual(
+    component.getFromEnum([{prop: {subProp: 'valA'}}, {prop: {subProp: 'valB'}}], 'prop.subProp'),
+    ['valA', 'valB'],
     'can parse nested properties');
 });
 
-/*test('method `isDS`', function(assert) {
-
-  assert.expect(5);
-
-  var component = this.subject();
-  var test = this;
-
-  // check if objects are DS.Model
-  assert.ok(
-    component.isDS(typeEmberDSObj),
-    'DS.Model returns true');
-
-  assert.ok(
-    !component.isDS(typeEmberArr),
-    'Ember.Array returns false');
-
-  assert.ok(
-    !component.isDS(typeEmberObj),
-    'Ember.Object returns false');
-
-  assert.ok(
-    !component.isDS({}),
-    'Object literal returns false');
-
-  assert.ok(
-    !component.isDS([]),
-    'Array literal returns false');
-});*/
-
-/*test('method `isEmberObj`', function(assert) {
-
-  assert.expect(5);
-
-  var component = this.subject();
-
-  // Ember.run(function() {
-
-    // check if objects are Ember.Object
-    assert.ok(
-      component.isEmberObj(typeEmberObj),
-      'Ember.Object returns true');
-
-    assert.ok(
-      !component.isEmberObj(typeEmberDSObj),
-      'DS.Model returns false');
-
-    assert.ok(
-      !component.isEmberObj(typeEmberArr),
-      'Ember.Array returns false');
-
-    assert.ok(
-      !component.isEmberObj({}),
-      'Object literal returns false');
-
-    assert.ok(
-      !component.isEmberObj([]),
-      'Array literal returns false');
-
-  // });
-});*/
-/*
 test('method `isMatch`', function(assert) {
 
   assert.expect(10);
@@ -361,7 +316,7 @@ test('method `willDestroy`', function(assert) {
 
   assert.expect(0);
 });
-*/
+
 // functionality
 // ---------------------
 
@@ -460,8 +415,3 @@ test('component filters when type is array', function(assert) {
     [{prop: [{prop: 'valR'}, {prop: 'valQ'}, {prop: 'valP'}]}],
     'properties in a nested array');
 });
-
-/*test('component filters when content type is Ember.DS', function(assert) {
-
-  assert.expect(0);
-});*/

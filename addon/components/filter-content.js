@@ -27,7 +27,8 @@ export default Ember.Component.extend({
   /**
    * properties
    *
-   * @description a space-delimited string of dot-notated properties to match against when filtering
+   * @description a space-delimited string of dot-notated properties to match
+   *   against when filtering
    * @memberof FilterContentComponent
    * @type {string}
    * @instance
@@ -48,21 +49,21 @@ export default Ember.Component.extend({
   ------------------------ */
 
   /**
-   * contentComp
+   * contentComputed
    *
    * @description an object of known type that we can safely, naively filter
    * @memberof FilterContentComponent
    * @type {(Ember.ArrayProxy|Ember.Object|Ember.Enumerable|DS.Model)}
    * @instance
    */
-  contentComp: Ember.computed('content', function() {
+  contentComputed: Ember.computed('content', function() {
 
     var content = !Ember.isNone(this.get('content')) ? this.get('content') : [];
-    // var returns = null;
     var type = Ember.typeOf(content);
 
     try {
 
+      // if the content is an array, ensure it's loyal to the cause
       if (content && type === 'array') {
 
         if (content['@each'] && content['@each'].hasArrayObservers) {
@@ -74,15 +75,17 @@ export default Ember.Component.extend({
           content = Ember.A(content);
         }
 
+        // todo: check on simplifying this
         return content && content.get ? content : Ember.ArrayProxy.create({content: content});
 
+      // todo: check on plausibility of removing this
       } else if (type === 'object') {
 
-        // coerce returns into an  Ember.Object
+        // coerce objects into Ember.Objects
         return Ember.Object.create(content);
 
-      // could be DS.Model, or junk
-      // if content is an instance that is not an ember.object, take offense
+      // could be DS.Model, or junk...
+      // - if content is an instance that is not an ember.object, take offense
       } else if (type === 'class') {
 
         if (this.isDS(content)) {
@@ -94,8 +97,8 @@ export default Ember.Component.extend({
           throw 'Ember.typeOf(content) === class that is not DS';
         }
 
-      // could be Ember.Object, or junk
-      // if content is an instance that is not an ember.object, take offense
+      // could be Ember.Object, or junk...
+      // - if content is an instance that is not an ember.object, take offense
       } else if (type === 'instance') {
 
         if (this.isEmberObj(content)) {
@@ -137,30 +140,31 @@ export default Ember.Component.extend({
     // one or more space
     var regexB = new RegExp(/\s+/g);
 
-    // cast to string
+    // cast to string and apply transforms
     if (properties) {
 
-      properties = properties.toString();
-      properties = properties.replace(regexA, '');
-      properties = properties.split(regexB);
+      return  properties
+                .toString()
+                .replace(regexA, '')
+                .split(regexB);
 
-      return properties;
+    } else {
+
+      return [];
     }
-
-    return [];
   }),
 
   /**
-   * queryComp
+   * queryComputed
    *
-   * @description the string being matched against 'contentComp' replaces
+   * @description the string being matched against 'contentComputed' replaces
    *   forward slashes to prevent error
    * @todo is there a better solution for forward slashes?
    * @memberof FilterContentComponent
    * @returns {string}
    * @instance
    */
-  queryComp: Ember.computed('query', function() {
+  queryComputed: Ember.computed('query', function() {
 
     var query = this.get('query');
     var regex = new RegExp(/\\+/g);
@@ -168,81 +172,36 @@ export default Ember.Component.extend({
     if (Ember.isPresent(query)) {
 
       return query.replace(regex, '');
-    }
 
-    return '';
+    } else {
+
+      return '';
+    }
   }),
-
-  /**
-   * fType
-   *
-   * @description returns a sanitized `typeof content`
-   * @memberof FilterContentComponent
-   * @instance
-   */
-  /*fType: Ember.computed('content', function() {
-
-    var content = this.get('content');
-    var returns = Ember.typeOf(content);
-
-    try {
-
-      // Ember.Object or junk
-      if (returns === 'instance') {
-
-        // if content is an instance that is not an ember.object, take offense
-        if (this.isEmberObj(content)) {
-
-          returns = 'object';
-
-        } else {
-
-          throw 'Ember.typeOf(content) === instance that is not Ember';
-        }
-
-      // DS.Model or junk
-      } else if (returns === 'class') {
-
-        // if content is an instance that is not an ember.object, take offense
-        if (this.isDS(content)) {
-
-          returns = 'ds';
-
-        } else {
-
-          throw 'Ember.typeOf(content) === class that is not DS';
-        }
-
-      } else {
-
-        if (returns !== 'array' && returns !== 'object') {
-
-          throw 'Ember.typeOf(content) === "'+ returns +'" is not supported';
-        }
-      }
-
-      return returns;
-
-    } catch (ex) {
-
-      console.warn('FilterContentComponent.fType', ex);
-    }
-  }),*/
 
   /* observers
   ------------------------ */
 
-  debounceFilter: null,
-
   /**
    * debounceFilter
    *
-   * @description apply the correct filter type to 'contentComp' and populate
-   *   'model' with the result
+   * @description an `Ember.run.later` timer that handles debouncing `applyFilter()`,
+   *   set by `setFilterTimer()`
+   * @memberof FilterContentComponent
+   * @type {string}
+   * @instance
+   */
+  debounceFilter: null,
+
+  /**
+   * setFilterTimer
+   *
+   * @description an observer that sets `debounceFilter` to an `Ember.run.later`
+   *   instance
    * @memberof FilterContentComponent
    * @instance
    */
-  setFilterTimer: Ember.observer('contentComp', 'queryComp', function() {
+  setFilterTimer: Ember.observer('contentComputed', 'queryComputed', function() {
 
     this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 350));
   }),
@@ -250,64 +209,79 @@ export default Ember.Component.extend({
   /* methods
   ------------------------ */
 
+  /**
+   * applyFilter
+   *
+   * @description a debounced method called by `debounceFilter()` to actually apply
+   *   the filter
+   * @memberof FilterContentComponent
+   * @instance
+   */
   applyFilter: function() {
 
     if (this.get('isDestroyed')) { return false; }
 
-    var compare = [];
-    var compareTemp = [];
-    var contentComp = this.get('contentComp');
-    var propertiesComp = this.get('propertiesComputed');
-    var queryComp = this.get('queryComp');
-    // var fType = this.get('fType');
-    // var len = propertiesComp.length;
-    // var matchFound = false;
-    // var match = false;
-    // var prop = null;
-    var returns = [];
-    // var skip = false;
+    var compareItems = [];
     var component = this;
+    var currentItem = [];
+    var filteredItems = [];
 
     // iterate each item passed in `content`
-    returns = Ember.EnumerableUtils.filter(contentComp, function(item) {
+    filteredItems = Ember.EnumerableUtils.filter(this.get('contentComputed'), function(item) {
 
-      compare = item;
-      compareTemp = [];
+      currentItem = item;
+      compareItems = [];
 
       // check each specified property for a match
-      propertiesComp.forEach(function(prop) {
+      component.get('propertiesComputed').forEach(function(prop) {
 
-        if (compare.get) {
+        // if the item supports `get()`, use it
+        if (currentItem.get) {
 
-          compare = compare.get(prop);
+          currentItem = currentItem.get(prop);
 
+        // if the item doesn't support `get()`, take the hard way
         } else {
 
-          compare = component.getFromEnum(Ember.makeArray(compare), prop);
+          currentItem = component.getFromEnum(Ember.makeArray(currentItem), prop);
         }
 
-        if (compare) {
+        if (currentItem) {
 
-          compareTemp = compareTemp.concat(compare);
+          compareItems = compareItems.concat(currentItem);
         }
       });
 
-      // console.log('COMPARE', compareTemp, queryComp, component.containsMatch(compare, queryComp));
+      if (!Ember.isEmpty(compareItems) && typeof compareItems[0] === 'string') {
 
-      return !Ember.isEmpty(compareTemp) && typeof compareTemp[0] === 'string' ? component.containsMatch(compareTemp, queryComp) : false;
+        return component.arrayContainsMatch(compareItems, component.get('queryComputed'));
+
+      } else {
+
+        return false;
+      }
     });
 
-    this.set('model', returns);
+    this.set('model', filteredItems);
   },
 
-  containsMatch: function(arr, query) {
+  /**
+   * arrayContainsMatch
+   *
+   * @description a method to check whether an array contains a match for a query
+   * @memberof FilterContentComponent
+   * @param possibleMatches {array.<string>} an array of strings to match against
+   * @param query {string} the query used to match against `possibleMatches`
+   * @returns {boolean} whether `possibleMatches` contains a match
+   */
+  arrayContainsMatch: function(possibleMatches, query) {
 
-    var that = this;
+    var component = this;
     var matchFound = false;
 
-    arr.forEach(function(item) {
+    possibleMatches.forEach(function(item) {
 
-      if (!matchFound && that.isMatch(item, query)) {
+      if (!matchFound && component.isMatch(item, query)) {
 
         matchFound = true;
       }
@@ -317,11 +291,12 @@ export default Ember.Component.extend({
   },
 
   /**
-   * a poor man's `get` for use on enumerables
-   * - returns a single, root-level value
+   * getFromEnum
+   * @todo: properly document this mess...
    *
-   * @param {array} arr the array being filtered
-   * @param {string} index dot notation of desired property
+   * @description a poor man's `get` for use on enumerables
+   * @param {array} enumerable the arrayof items to search for `property`
+   * @param {string} property dot notation of desired property
    * @returns {array} properties matching specified indices
    */
   getFromEnum: function(enumerable, property) {
@@ -348,7 +323,6 @@ export default Ember.Component.extend({
     enumerable.forEach(function(item) {
 
       tempItem = item;
-      // tempProperties = properties;
 
       tempProperties.forEach(function(index, y) {
 
@@ -400,44 +374,20 @@ export default Ember.Component.extend({
   },
 
   /**
-   * isDS
-   *
-   * @description check if passed value is DS.Model
-   * @memberof FilterContentComponent
-   * @param {*} value the value being evaluated
-   * @instance
-   */
-  /*isDS: function(value) {
-
-    return (Ember.inspect(value).toLowerCase().indexOf('ds.model') !== -1);
-  },*/
-
-  /**
-   * isEmberObj
-   *
-   * @description check if passed value is Ember.Object
-   * @memberof FilterContentComponent
-   * @param {*} value the value being evaluated
-   * @instance
-   */
-  /*isEmberObj: function (value) {
-
-    return (Ember.inspect(value).toLowerCase().indexOf('ember.object') !== -1);
-  },*/
-
-  /**
    * isMatch
+   * @todo: seems like this would fail if either value was 'false', should
+   *   probably fix this if that's the case...
    *
    * @description checks if valueA and valueB match; passed values are sloppily
    *   coerced to strings
    * @memberof FilterContentComponent
    * @param {(number|string)} valueA
    * @param {(number|string)} valueA
-   * @instance
+   * @returns {boolean} whether there was a match between the passed values
    */
   isMatch: function(valueA, valueB) {
 
-    var returns = false;
+    var matched = false;
     var typeA = Ember.typeOf(valueA);
     var typeB = Ember.typeOf(valueB);
 
@@ -448,26 +398,22 @@ export default Ember.Component.extend({
 
       valueA = Ember.inspect(valueA).toLowerCase();
       valueB = Ember.inspect(valueB).toLowerCase();
-      returns = (valueA.match(valueB) !== null);
+      matched = (valueA.match(valueB) !== null);
     }
 
-    return returns;
+    return matched;
   },
 
-  /*setup: Ember.on('init', function() {
-
-    // trigger contentComp if necessary
-    if (!this.get('content')) {
-
-      this.set('content', []);
-    }
-  }),*/
-
+  /**
+   * willDestroy
+   * @todo: this may be elligible for deprecation
+   *
+   * @description runs before the component is destroyed and tears things down
+   */
   willDestroy: function() {
 
     this._super();
 
-    // Ember.run.cancel(this.get('debounceFilter'));
     this.set('debounceFilter', null);
   }
 });
