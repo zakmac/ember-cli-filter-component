@@ -85,8 +85,8 @@ model: [{
 {{/filter-content}}
 ```
 ```javascript
-filterProperty: Ember.computed('propertyToggle', function() {
-    return this.get('propertyToggle') ? 'name.longForm' : 'name.code';
+filterProperty: Ember.computed('filterToggle', function() {
+    return this.get('filterToggle') ? 'name.longForm' : 'name.code';
 }),
 model: [{
     "name": {
