@@ -48,25 +48,33 @@ export default Ember.Component.extend({
   ------------------------ */
 
   /**
-   * fContent
+   * contentComp
    *
    * @description an object of known type that we can safely, naively filter
    * @memberof FilterContentComponent
    * @type {(Ember.ArrayProxy|Ember.Object|Ember.Enumerable|DS.Model)}
    * @instance
    */
-  fContent: Ember.computed('content', function() {
+  contentComp: Ember.computed('content', function() {
 
-    var content = this.get('content');
+    var content = !Ember.isNone(this.get('content')) ? this.get('content') : [];
     // var returns = null;
     var type = Ember.typeOf(content);
 
     try {
 
-      if (type === 'array') {
+      if (content && type === 'array') {
 
-        // coerce returns into Ember.Array
-        return Ember.A(content);
+        if (content['@each'] && content['@each'].hasArrayObservers) {
+
+          content = content;
+
+        } else {
+
+          content = Ember.A(content);
+        }
+
+        return content && content.get ? content : Ember.ArrayProxy.create({content: content});
 
       } else if (type === 'object') {
 
@@ -108,20 +116,20 @@ export default Ember.Component.extend({
 
     } catch (ex) {
 
-      console.warn('FilterContentComponent.fContent', ex);
+      console.warn('FilterContentComponent.contentComp', ex);
     }
   }),
 
   /**
-   * fProperties
+   * propertiesComputed
    *
-   * @description an array of strings representing the fContent properties
+   * @description an array of strings representing the contentComp properties
    *   matching against
    * @memberof FilterContentComponent
    * @returns {array}
    * @instance
    */
-  fProperties: Ember.computed('properties', function() {
+  propertiesComputed: Ember.computed('properties', function() {
 
     var properties = this.get('properties') || '';
     // anything ![alphanumeric, underscore, period, space, atsymbol]
@@ -143,16 +151,16 @@ export default Ember.Component.extend({
   }),
 
   /**
-   * fQuery
+   * queryComp
    *
-   * @description the string being matched against 'fContent' replaces
+   * @description the string being matched against 'contentComp' replaces
    *   forward slashes to prevent error
    * @todo is there a better solution for forward slashes?
    * @memberof FilterContentComponent
    * @returns {string}
    * @instance
    */
-  fQuery: Ember.computed('query', function() {
+  queryComp: Ember.computed('query', function() {
 
     var query = this.get('query');
     var regex = new RegExp(/\\+/g);
@@ -172,7 +180,7 @@ export default Ember.Component.extend({
    * @memberof FilterContentComponent
    * @instance
    */
-  fType: Ember.computed('content', function() {
+  /*fType: Ember.computed('content', function() {
 
     var content = this.get('content');
     var returns = Ember.typeOf(content);
@@ -219,7 +227,7 @@ export default Ember.Component.extend({
 
       console.warn('FilterContentComponent.fType', ex);
     }
-  }),
+  }),*/
 
   /* observers
   ------------------------ */
@@ -229,12 +237,12 @@ export default Ember.Component.extend({
   /**
    * debounceFilter
    *
-   * @description apply the correct filter type to 'fContent' and populate
+   * @description apply the correct filter type to 'contentComp' and populate
    *   'model' with the result
    * @memberof FilterContentComponent
    * @instance
    */
-  setFilterTimer: Ember.observer('fContent', 'fQuery', function() {
+  setFilterTimer: Ember.observer('contentComp', 'queryComp', function() {
 
     this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 350));
   }),
@@ -242,100 +250,143 @@ export default Ember.Component.extend({
   /* methods
   ------------------------ */
 
-  model: 'butt',
-
-  /**
-   * applyFilter
-   *
-   * @description apply the filter to 'fContent', debounced by 'dbounceFilter'
-   * @memberof FilterContentComponent
-   * @instance
-   */
   applyFilter: function() {
 
-    // side step a bug that occurs during testing
-    // todo: find a better fix for this... `willDestroy`?
-    if (this.get('isDestroyed')) { return false; }
+    var compare = [];
+    var compareTemp = [];
+    var contentComp = this.get('contentComp');
+    var propertiesComp = this.get('propertiesComputed');
+    var queryComp = this.get('queryComp');
+    // var fType = this.get('fType');
+    var len = propertiesComp.length;
+    var matchFound = false;
+    // var match = false;
+    // var prop = null;
+    var returns = [];
+    var skip = false;
+    var component = this;
 
-    // Ember.run(function() {
+    // iterate each item passed in `content`
+    returns = Ember.EnumerableUtils.filter(contentComp, function(item) {
 
-      var compare = [];
-      var fContent = this.get('fContent');
-      var fProps = this.get('fProperties');
-      var fQuery = this.get('fQuery');
-      var fType = this.get('fType');
-      var match = false;
-      // var prop = null;
-      var returns = [];
-      var that = this;
+      compare = item;
+      compareTemp = [];
 
-      if (!Ember.isBlank(fContent) && !Ember.isBlank(fQuery) && !Ember.isBlank(fProps)) {
+      // check each specified property for a match
+      propertiesComp.forEach(function(prop, z) {
 
-        if (fType === 'array') {
+        if (compare.get) {
 
-          // iterate each item passed in `content`
-          returns = Ember.EnumerableUtils.filter(fContent, function(item) {
-
-            compare = item;
-            match = false;
-
-            // check each specified property for a match
-            fProps.forEach(function(prop) {
-
-              // split the property into its dot string fragments
-              // prop = prop.split('.');
-
-              // recurse into the object using dot string fragments
-              // prop.forEach(function(propFrag) {
-
-              compare = that.enumGet(compare, prop);
-              // });/
-
-              if (that.containsMatch(compare, fQuery)) {
-
-                match = true;
-              }
-            });
-
-            return match;
-          });
+          console.log('GET');
+          compare = compare.get(prop);
 
         } else {
 
-          // iterate each item passed in `content`
-          returns = Ember.EnumerableUtils.filter(fContent, function(item) {
-
-            // check each specified property for a match
-            fProps.forEach(function(prop) {
-
-              compare = this.get(prop);
-
-              return that.containsMatch(compare, fQuery);
-            });
-
-            return false;
-          });
+          console.log('ENUM', compare);
+          compare = component.getFromEnum(compare, prop);
         }
-      }
 
-      this.set('model', returns);
-    // });
+        if (compare) {
+
+          compareTemp = compareTemp.concat(compare);
+        }
+      });
+
+      console.log('COMPARE', compareTemp, queryComp, component.containsMatch(compare, queryComp));
+
+      return component.containsMatch(compareTemp, queryComp);
+    });
+
+    return returns;
   },
 
   containsMatch: function(arr, query) {
 
     var that = this;
-    var match = false;
+    var matchFound = false;
 
     arr.forEach(function(item) {
 
-      if (that.isMatch(item, query)) {
+      if (!matchFound) {
 
-        match = true;
+        console.log('containsmatch arr', arr);
+        console.log(item, query, that.isMatch(item, query));
+
+        if (that.isMatch(item, query)) {
+
+          matchFound = true;
+        }
       }
     });
 
-    return match;
+    return matchFound;
+  },
+
+  getFromEnum: function(enumerable, property) {
+
+    var component = this;
+    var found = [];
+    var len = 0;
+    var properties = property.split('.');
+    var skip = false;
+    var tempItem = null;
+    var tempProperties = properties;
+
+    len = properties.length;
+
+    if (!enumerable) {
+
+      return null;
+    }
+
+    // enumerable.forEach(function(item, z) {
+
+      tempItem = enumerable;
+      tempProperties = properties;
+
+      tempProperties.forEach(function(index, y) {
+
+        if (!skip) {
+
+          if (index === '@each') {
+
+            if (Ember.isArray(tempItem)) {
+
+              if (y + 1 !== len) {
+
+                tempItem = Ember.makeArray(tempItem);
+                tempProperties = tempProperties.slice(y + 1, len).join('.');
+                tempItem = component.getFromEnum(tempItem, tempProperties);
+              }
+
+            } else {
+
+              tempItem = null;
+            }
+
+            skip = true;
+
+          } else if (typeof tempItem === 'object') {
+
+            tempItem = tempItem[index] || null;
+
+          } else {
+
+            tempItem = null;
+            skip = true;
+          }
+        }
+      });
+
+      skip = false;
+
+      if (tempItem) {
+
+        found = found.concat(tempItem);
+      }
+    // });
+
+    return found;
   },
 
   /**
@@ -346,20 +397,19 @@ export default Ember.Component.extend({
    * @param {string} index dot notation of desired property
    * @returns {array} properties matching specified indices
    */
-  enumGet: function(arr, index) {
+  /*enumGet: function(arr, index) {
 
     var component = this;
+    var foundItems = [];
         index = Ember.inspect(index).split('.');
-    var returns = arr;
     var len = index.length;
-    var skip = false;
-    // var prevPid = null;
-
-
+    var recursed = false;
+    var returns = arr;
+    var junk = null;
 
     index.forEach(function(pid, z) {
 
-      if (!skip) {
+      if (!recursed) {
 
         if (pid === '@each') {
 
@@ -367,41 +417,38 @@ export default Ember.Component.extend({
 
           if (z + 1 === len) {
 
+            console.log('SIT:A (@EACH:IS_LAST)');
             returns = returns;
 
           } else {
 
-            console.log('> '+ index.join('.'), index.slice(z + 1, len));
-            console.log('#1', returns);
-            console.log('#2', test);
-            console.log('##', index.slice(z + 1, len));
-            console.log('###', index.slice(z + 1, len).join('.'));
-            console.log('####', component.enumGet(returns, test));
+            console.log('SIT:B (@EACH:NOT_LAST), '+ test);
 
-            skip = true;
             returns = component.enumGet(returns, test);
+            recursed = true;
           }
-
-        } else if (returns[pid]) {
-
-          returns = returns[pid];
 
         } else {
 
-          returns = [];
+          if (returns && returns[pid]) {
+
+            console.log('SIT:C (NOT_@EACH:RETURNS[PID])');
+
+            returns = returns[pid];
+
+          } else {
+
+            console.log('SIT:D (NOT_@EACH:NOT_RETURNS[PID])');
+            returns = [];
+          }
         }
       }
+
+      if (returns) { foundItems.push(returns); }
     });
 
-    // prevPid = z > 0 ? index[z - 1] : null;
-    //
-    // } else if (prevPid === '@each' && z < len) {
-    //   console.log('previous was @each');
-    //   returns = component.enumGet(returns, prevPid);
-    //   console.log('value is', returns);
-
-    return Ember.makeArray(returns);
-  },
+    return foundItems;
+  },*/
 
   /**
    * isDS
@@ -411,10 +458,10 @@ export default Ember.Component.extend({
    * @param {*} value the value being evaluated
    * @instance
    */
-  isDS: function(value) {
+  /*isDS: function(value) {
 
     return (Ember.inspect(value).toLowerCase().indexOf('ds.model') !== -1);
-  },
+  },*/
 
   /**
    * isEmberObj
@@ -424,10 +471,10 @@ export default Ember.Component.extend({
    * @param {*} value the value being evaluated
    * @instance
    */
-  isEmberObj: function (value) {
+  /*isEmberObj: function (value) {
 
     return (Ember.inspect(value).toLowerCase().indexOf('ember.object') !== -1);
-  },
+  },*/
 
   /**
    * isMatch
@@ -458,14 +505,14 @@ export default Ember.Component.extend({
     return returns;
   },
 
-  setup: Ember.on('init', function() {
+  /*setup: Ember.on('init', function() {
 
-    // trigger fContent if necessary
+    // trigger contentComp if necessary
     if (!this.get('content')) {
 
       this.set('content', []);
     }
-  }),
+  }),*/
 
   willDestroy: function() {
 
