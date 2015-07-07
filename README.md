@@ -1,5 +1,8 @@
 # ember-cli-filter-component
 [![Code Climate](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/gpa.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component)
+[![Shields.io](https://img.shields.io/badge/tests-passing-brightgreen.svg)](http://shields.io)
+[![Shields.io](https://img.shields.io/badge/coverage-unknown-orange.svg)](http://shields.io)
+[![Shields.io](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://shields.io)
 
 `ember-cli-filter-component` adds a `{{filter-content}}` component to your project. 
 - The component filters an array passed into it using a text input included above it's `yield`ed conent.
@@ -7,9 +10,10 @@
 
 #### Installation
 
-From within your project's folder, enter the following command:
-
-- `ember install ember-cli-filter-component`
+```shell
+# from within your project's folder, enter the following command
+ember install ember-cli-filter-component
+```
 
 ## Parameters
 
@@ -38,9 +42,9 @@ From within your project's folder, enter the following command:
 ```
 ```javascript
 model: [
-    [ '#00FFFF', 'Aqua' ],
-    [ '#FFE4B5', 'Moccasin' ],
-    [ '#708090', 'SlateGray' ]
+    [ '00FFFF', 'Aqua' ],
+    [ 'FFE4B5', 'Moccasin' ],
+    [ '708090', 'SlateGray' ]
 ]
 ```
 
