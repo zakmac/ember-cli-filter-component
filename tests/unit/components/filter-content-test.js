@@ -16,15 +16,25 @@ var typeEmberObj = Ember.Object.create({});
 
 test('initial component state', function(assert) {
 
-  assert.expect(6);
+  assert.expect(8);
 
   var component = this.subject();
 
   // ensure all properties have the correct default state
   assert.deepEqual(
+    component.get('classNames'),
+    ['ember-view', 'filter-content'],
+    '`classNames` has an initial value of ["ember-view", filter-content"]');
+
+  assert.deepEqual(
     component.get('content'),
     [],
     '`content` has an initial value of []');
+
+  assert.strictEqual(
+    component.get('placeholder'),
+    '',
+    '`placeholder` has an initial value of ""');
 
   assert.strictEqual(
     component.get('properties'),
@@ -56,7 +66,17 @@ test('initial component state', function(assert) {
 // ---------------------
 // noop, property values are covered by initial state tests
 
+test('property `classNames`', function(assert) {
+
+  assert.expect(0);
+});
+
 test('property `content`', function(assert) {
+
+  assert.expect(0);
+});
+
+test('property `placeholder`', function(assert) {
 
   assert.expect(0);
 });

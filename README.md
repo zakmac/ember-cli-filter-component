@@ -9,7 +9,7 @@
 - The component filters an array passed into it using a text input included above it's `yield`ed conent.
 - Items matching the filter query are available via the `model` property on the component.
 
-#### Installation
+### Installation
 
 ```shell
 # from within your project's folder, enter the following command
@@ -23,11 +23,16 @@ ember install ember-cli-filter-component
 {{filter-content content=model}}
 ```
 
+**placeholder** – Placeholder copy for the text input field.
+```handlebars
+{{filter-content placeholder="Type here to filter..."}}
+```
+
 **properties** – Properties on each item to filter.
 - Accepts a space-delimited string.
 - Specify `@each` to iterate an array.
 ```handlebars
-{{filter-content content=model properties="title category.@each"}}
+{{filter-content properties="title category.@each"}}
 ```
 
 ## Examples

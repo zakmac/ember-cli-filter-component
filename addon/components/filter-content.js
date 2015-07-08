@@ -15,6 +15,16 @@ export default Ember.Component.extend({
   ------------------------ */
 
   /**
+   * classNames
+   *
+   * @description class names applied to the component DOM object
+   * @memberof FilterContentComponent
+   * @type {array.<string>}
+   * @instance
+   */
+  classNames: ['filter-content'],
+
+  /**
    * content
    *
    * @description the content passed in to be filtered
@@ -23,6 +33,16 @@ export default Ember.Component.extend({
    * @instance
    */
   content: [],
+
+  /**
+   * placeholder
+   *
+   * @description placeholder text for the text input field
+   * @memberof FilterContentComponent
+   * @type {string}
+   * @instance
+   */
+  placeholder: '',
 
   /**
    * properties
