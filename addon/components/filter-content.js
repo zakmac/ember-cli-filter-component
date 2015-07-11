@@ -394,6 +394,17 @@ export default Ember.Component.extend({
   },
 
   /**
+   * init
+   *
+   * @description use init to kick off an initial filtering
+   */
+  init: function() {
+
+    this._super();
+    this.applyFilter();
+  },
+
+  /**
    * isMatch
    * @todo: seems like this would fail if either value was 'false', should
    *   probably fix this if that's the case...
