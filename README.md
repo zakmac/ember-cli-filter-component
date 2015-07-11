@@ -23,6 +23,11 @@ ember install ember-cli-filter-component
 {{filter-content content=model}}
 ```
 
+**inputClassNames** – Space-delimited list of class names to append to the query input field.
+```handlebars
+{{filter-content inputClassNames="outlined"}}
+```
+
 **placeholder** – Placeholder copy for the text input field.
 ```handlebars
 {{filter-content placeholder="Type here to filter..."}}
