@@ -16,7 +16,7 @@ var typeEmberObj = Ember.Object.create({});
 
 test('initial component state', function(assert) {
 
-  assert.expect(8);
+  assert.expect(10);
 
   var component = this.subject();
 
@@ -30,6 +30,11 @@ test('initial component state', function(assert) {
     component.get('content'),
     [],
     '`content` has an initial value of []');
+
+  assert.strictEqual(
+    component.get('inputClassNames'),
+    '',
+    '`inputClassNames` has an initial value of ""');
 
   assert.strictEqual(
     component.get('placeholder'),
@@ -51,6 +56,11 @@ test('initial component state', function(assert) {
     [],
     '`contentComputed` initially computes to []');
 
+  assert.strictEqual(
+    component.get('inputClassNamesComputed'),
+    'filter-input',
+    '`inputClassNamesComputed` initially computes to "filter-content"');
+
   assert.deepEqual(
     component.get('propertiesComputed'),
     [],
@@ -60,6 +70,8 @@ test('initial component state', function(assert) {
     component.get('queryComputed'),
     '',
     '`queryComputed` initially computes to ""');
+
+  // @todo: write a test to check initial status of filter input field's class?
 });
 
 // properties
@@ -162,7 +174,7 @@ test('computed property `queryComputed`', function(assert) {
 
 test('computed properties observe their specified targets', function(assert) {
 
-  assert.expect(3);
+  assert.expect(4);
 
   var component = this.subject();
 
@@ -176,6 +188,17 @@ test('computed properties observe their specified targets', function(assert) {
     component.get('contentComputed'),
     [{thing: 'A'}],
     'Changing `content` updates `contentComputed`');
+
+  // changing `inputClassNames` recomputes observers
+  Ember.run(function() {
+
+    component.set('inputClassNames', 'test-class anotherClass');
+  });
+
+  assert.strictEqual(
+    component.get('inputClassNamesComputed'),
+    'test-class anotherClass filter-input',
+    'Changing `inputClassNames` updates `inputClassNamesComputed`');
 
   // changing `properties` recomputes observers
   Ember.run(function() {
