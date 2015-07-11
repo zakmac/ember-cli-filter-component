@@ -365,11 +365,14 @@ test('method `willDestroy`', function(assert) {
 
 test('component filters when type is array', function(assert) {
 
-  assert.expect(5);
+  assert.expect(6);
 
   var component = this.subject();
   var dummyData = [
-    {
+    [
+      [1, 2, 3],
+      ['A', 'B', 'C']
+    ], {
       prop: 'valZ'
     }, {
       prop: {
@@ -444,6 +447,20 @@ test('component filters when type is array', function(assert) {
     component.get('model'),
     [{prop: ['valU', 'valT', 'valS']}],
     'nested array');
+
+  // array of arrays
+  Ember.run(function() {
+
+    component.set('content', dummyData);
+    component.set('properties', '@each.@each');
+    component.set('query', 'A');
+    component.applyFilter();
+  });
+
+  assert.deepEqual(
+    component.get('model'),
+    [[[1, 2, 3], ['A', 'B', 'C']]],
+    'array of arrays');
 
   // properties in a nested array
   Ember.run(function() {

@@ -118,6 +118,8 @@ export default Ember.Component.extend({
       // - if content is an instance that is not an ember.object, take offense
       } else if (type === 'class') {
 
+        // @todo: isDS does not currently exist, luckily this path has never
+        //   been executed, yet...
         if (this.isDS(content)) {
 
           return content;
@@ -298,7 +300,7 @@ export default Ember.Component.extend({
         }
       });
 
-      if (!Ember.isEmpty(compareItems) && typeof compareItems[0] === 'string') {
+      if (!Ember.isEmpty(compareItems)) {
 
         return component.arrayContainsMatch(compareItems, component.get('queryComputed'));
 
@@ -370,9 +372,11 @@ export default Ember.Component.extend({
 
       tempItem = item;
 
+      tempProperties = properties;
+
       tempProperties.forEach(function(index, y) {
 
-        if (!skip) {
+        if (!skip && tempItem) {
 
           if (index === '@each') {
 
