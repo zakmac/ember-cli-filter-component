@@ -35,6 +35,16 @@ export default Ember.Component.extend({
   content: [],
 
   /**
+   * inputClassNames
+   *
+   * @description space-delimited class names to append to the text query input field
+   * @memberof FilterContentComponent
+   * @type {string}
+   * @instance
+   */
+  inputClassNames: '',
+
+  /**
    * placeholder
    *
    * @description placeholder text for the text input field
@@ -141,6 +151,21 @@ export default Ember.Component.extend({
 
       console.warn('FilterContentComponent.contentComp', ex);
     }
+  }),
+
+  /**
+   * inputClassNamesComputed
+   *
+   * @description concatenates any passed `inputClassNames` string with 'filter-input'
+   * @memberof FilterContentComponent
+   * @type {string}
+   * @instance
+   */
+  inputClassNamesComputed: Ember.computed('inputClassNames', function() {
+
+    var classNames = this.get('inputClassNames');
+
+    return (classNames ? classNames + ' ' : '') + 'filter-input';
   }),
 
   /**
