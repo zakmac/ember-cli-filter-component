@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "1.0.1-beta",
+  "version": "1.1.0",
   "description": "A simple component used to filter an array based on user input.",
   "directories": {
     "doc": "doc",

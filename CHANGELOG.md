@@ -1,6 +1,12 @@
 # ember-cli-filter-component
 
-### v1.0.1-beta (TBD)
+### v1.1.0 (July 10, 2015)
+- [FEATURE] Filter query input placeholder text can now be specified.
+- [FEATURE] Filter query input className can now be customized.
+- [BUGFIX] Initial filtering did not take place, disabling subsequent filtering.
+- [BUGFIX] Component's yield context changed to `controller` from `model`.
+
+### v1.0.1-beta (July 7, 2015)
 - #3 [BUGFIX] Passing unit tests
 - #1 [BUGFIX] Subsequent property selection fails following `@each` when filtering an enumerable
 
