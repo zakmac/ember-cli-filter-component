@@ -9,6 +9,8 @@
 - The component filters an array passed into it using a text input included above it's `yield`ed conent.
 - Items matching the filter query are available via the `model` property on the component.
 
+<center><img src="http://i.imgur.com/MiSiG2G.gif" width="300"></center>
+
 ### Installation
 
 ```shell
