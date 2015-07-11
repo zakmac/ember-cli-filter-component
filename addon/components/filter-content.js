@@ -470,7 +470,6 @@ export default Ember.Component.extend({
   willDestroy: function() {
 
     this._super();
-
     this.set('debounceFilter', null);
   }
 });
