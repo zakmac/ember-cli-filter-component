@@ -249,11 +249,12 @@ export default Ember.Component.extend({
     // iterate each item passed in `content`
     filteredItems = Ember.EnumerableUtils.filter(this.get('contentComputed'), function(item) {
 
-      currentItem = item;
       compareItems = [];
 
       // check each specified property for a match
       component.get('propertiesComputed').forEach(function(prop) {
+
+        currentItem = item;
 
         // if the item supports `get()`, use it
         if (currentItem.get) {
