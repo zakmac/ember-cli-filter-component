@@ -5,27 +5,30 @@
 [![Test Coverage](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/coverage.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component/coverage)
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
-`ember-cli-filter-component` adds a `{{filter-content}}` component to your project. 
-- The component filters an array passed into it using a text input included above it's `yield`ed conent.
-- Items matching the filter query are available via the `model` property on the component.
+## About
+
+Filter an array of items based on specified properties using a text input field.
+
+`ember-cli-filter-component` provides a `{{filter-content}}` block component, inside which you can specify a template and access some useful properties.
 
 <center><img src="http://i.imgur.com/MiSiG2G.gif" width="300"></center>
 
-### Installation
+## Installation
 
 ```shell
-# from within your project's folder, enter the following command
+cd /path/to/my-awesome-application
 ember install ember-cli-filter-component
 ```
 
-## Parameters
+## Usage
 
 **content** – The array of items being filtered.
 ```handlebars
 {{filter-content content=model}}
 ```
 
-**inputClassNames** – Space-delimited list of class names to append to the query input field.
+**inputClassNames** – Class names to append to the query input field.
+- Accepts a space-delimited string.
 ```handlebars
 {{filter-content inputClassNames="outlined"}}
 ```
@@ -43,6 +46,27 @@ ember install ember-cli-filter-component
 ```
 
 ## Examples
+
+**Dropping the component into an existing template**
+```handlebars
+{{! the original template }}
+<ul class="airports">
+  {{#each longList as |airport|}}
+    <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
+  {{/each}}
+</ul>
+```
+
+```handlebars
+{{! the new tempalte, using filter-content }}
+{{#filter-content content=longList properties="name.code name.longForm" as |fc|}}
+  <ul class="airports">
+    {{#each fc.model as |airport|}}
+      <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
+    {{/each}}
+  </ul>
+{{/filter-content}}
+```
 
 **Filter an array of strings**
 ```handlebars
@@ -72,6 +96,20 @@ model: [{
 }]
 ```
 
+**![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter a arrays of arrays**
+```handlebars
+{{filter-content content=model properties="@each.@each"}}
+```
+```javascript
+model: [[
+  [1, 2, 3],
+  ['A', 'B', 'C']
+], [
+  [98, 99, 100],
+  ['X', 'Y', 'Z']
+]]
+```
+
 **Filter an object inside an array**
 ```handlebars
 {{filter-content content=model properties="bills.@each.name coins.@each.name"}}
@@ -91,7 +129,7 @@ model: [{
 }]
 ```
 
-**Toggle `properties`'s value with a button**
+**Toggle `properties`' value with a button**
 ```handlebars
 {{#filter-content content=model properties=filterProperty as |fc|}}
   <button {{action "tp"}}>Change filter type</button>
@@ -134,6 +172,11 @@ actions: {
 ## Contributing
 
 The more the merrier. **Please submit any PRs against** [__the__ `feature` __branch__](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
+
+```shell
+cd /path/to/projects
+git clone git@github.com:zakmac/ember-cli-filter-component.git
+```
 
 --- 
 <small>
