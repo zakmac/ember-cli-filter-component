@@ -42,14 +42,15 @@
   },
   "keywords": [
     "component",
+    "ember",
     "ember-addon",
     "ember-cli",
+    "embercli",
     "emberjs",
     "filter",
-    "filter component",
-    "inline filter",
-    "inline search",
-    "simple filter"
+    "inline",
+    "search",
+    "simple"
   ],
   "ember-addon": {
     "configPath": "tests/dummy/config"
