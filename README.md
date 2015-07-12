@@ -32,7 +32,7 @@ ember install ember-cli-filter-component
 - _Optional_
 - Accepts a space-delimited string.
 ```handlebars
-{{filter-content inputClassNames="outlined"}}
+{{filter-content inputClassNames="all-caps monospaced"}}
 ```
 
 **placeholder** – Placeholder copy for the text input field.
@@ -55,9 +55,6 @@ ember install ember-cli-filter-component
 **showInput** – Whether to show the filter query input field.
 - _Optional_
 - Defaults to `true`.
-```handlebars
-{{filter-content showInput=false}}
-```
 
 ## Examples
 
