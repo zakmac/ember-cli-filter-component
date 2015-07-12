@@ -129,7 +129,7 @@ export default Ember.Component.extend({
       } else if (type === 'class') {
 
         // @todo: isDS does not currently exist, luckily this path has never
-        //   been executed, yet...
+        // been executed, yet...
         if (this.isDS(content)) {
 
           return content;
@@ -305,12 +305,15 @@ export default Ember.Component.extend({
           currentItem = component.getFromEnum(Ember.makeArray(currentItem), prop);
         }
 
+        // if an item was found add it to the matching queue
         if (currentItem) {
 
           compareItems = compareItems.concat(currentItem);
         }
       });
 
+      // return true if the specified indices were found and of those, at least
+      // one matched the query
       if (!Ember.isEmpty(compareItems)) {
 
         return component.arrayContainsMatch(compareItems, component.get('queryComputed'));
@@ -351,10 +354,9 @@ export default Ember.Component.extend({
 
   /**
    * getFromEnum
-   * @todo: properly document this mess...
    *
-   * @description a poor man's `get` for use on enumerables
-   * @param {array} enumerable the arrayof items to search for `property`
+   * @description provides `get()`-like functionality for enumerables
+   * @param {array} enumerable the array of items to search for `property`
    * @param {string} property dot notation of desired property
    * @returns {array} properties matching specified indices
    */
@@ -363,38 +365,51 @@ export default Ember.Component.extend({
     var component = this;
     var found = [];
     var len = 0;
-    var properties = property.split('.');
+    var properties = property.split('.') || [];
     var skip = false;
     var tempItem = null;
     var tempProperties = properties;
 
-    len = tempProperties.length;
+    len = properties.length;
 
+    // if no array was passed return an empty array
     if (!enumerable) {
 
       return [];
 
+    // if all that was requested was "@each" return what was passed in
     } else if (property === '@each') {
 
       return enumerable;
     }
 
+    // iterate the passed array of items and attempt to "`get(property)`" from each
     enumerable.forEach(function(item) {
 
+      // create copies that can be modified
       tempItem = item;
-
       tempProperties = properties;
 
+      // iterate each specified index chunk to...
       tempProperties.forEach(function(index, y) {
 
+        // efficiency/safety check
         if (!skip && tempItem) {
 
+          // if the specified index is "@each":
+          // - if current item is last
+          //   - return whatever `tempItem` is
+          // - if current item is not last
+          //   - recurse and continue looking for value(s)
+          // - set `skip=true` to prevent subsequent loops from incorrectly
+          //   trying to whittle down `tempItem`
           if (index === '@each') {
 
             if (Ember.isArray(tempItem)) {
 
               if (y + 1 !== len) {
 
+                // recurse and continue looking for value(s)
                 tempItem = Ember.makeArray(tempItem);
                 tempProperties = tempProperties.slice(y + 1, len).join('.');
                 tempItem = component.getFromEnum(tempItem, tempProperties);
@@ -404,17 +419,23 @@ export default Ember.Component.extend({
                 tempItem = tempItem;
               }
 
+            // if the item isn't an array return null to prevent problems
             } else {
 
               tempItem = null;
             }
 
+            // prevent subsequent loops from incorrectly trying to whittle
+            // down `tempItem`
             skip = true;
 
+          // if `tempItem` is an object, attempt to find a value at the
+          // specified index
           } else if (typeof tempItem === 'object') {
 
             tempItem = tempItem[index] || null;
 
+          // if the specified index was not "@each" and `item` isn't an object
           } else {
 
             tempItem = null;
@@ -423,8 +444,11 @@ export default Ember.Component.extend({
         }
       });
 
+      // reset `skip` for the next iteration
       skip = false;
 
+      // if `tempItem` still exists at this point, add it to the array of
+      // found items
       if (tempItem) {
 
         found = found.concat(tempItem);
