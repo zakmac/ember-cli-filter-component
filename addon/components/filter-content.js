@@ -35,6 +35,16 @@ export default Ember.Component.extend({
   content: [],
 
   /**
+   * filteredContent
+   *
+   * @description set by applyFilter, the name says it all
+   * @memberof FilterContentComponent
+   * @type {array}
+   * @instance
+   */
+  filteredContent: [],
+
+  /**
    * inputClassNames
    *
    * @description space-delimited class names to append to the text query input field
@@ -324,7 +334,7 @@ export default Ember.Component.extend({
       }
     });
 
-    this.set('model', filteredItems);
+    this.set('filteredContent', filteredItems);
   },
 
   /**

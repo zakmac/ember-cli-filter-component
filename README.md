@@ -25,7 +25,7 @@ ember install ember-cli-filter-component
 **content** – The array of items being filtered.
 - **Required!**
 ```handlebars
-{{filter-content content=model}}
+{{filter-content content=longList}}
 ```
 
 **inputClassNames** – Class names to append to the query input field.
@@ -49,7 +49,7 @@ ember install ember-cli-filter-component
 {{filter-content properties="title category.@each"}}
 ```
 
-**query** – The text string items on the passed model are matched against.
+**query** – The text string items on `content` are matched against.
 - _Optional_
 
 **showInput** – Whether to show the filter query input field.
@@ -62,7 +62,7 @@ ember install ember-cli-filter-component
 ```handlebars
 {{! original template }}
 <ul class="airports">
-  {{#each longList as |airport|}}
+  {{#each busiestAirports as |airport|}}
     <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
   {{/each}}
 </ul>
@@ -70,9 +70,9 @@ ember install ember-cli-filter-component
 
 ```handlebars
 {{! new template using filter-content }}
-{{#filter-content content=longList properties="name.code name.longForm" as |fc|}}
+{{#filter-content content=busiestAirports properties="name.code name.longForm" as |fc|}}
   <ul class="airports">
-    {{#each fc.model as |airport|}}
+    {{#each fc.filteredContent as |airport|}}
       <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
     {{/each}}
   </ul>
@@ -82,14 +82,14 @@ ember install ember-cli-filter-component
 **Filter an array**
 ```handlebars
 {{! filter by a specific item }}
-{{filter-content content=model properties="1"}}
+{{filter-content content=htmlColors properties="1"}}
 ```
 ```handlebars
 {{! filter by all items }}
-{{filter-content content=model properties="@each"}}
+{{filter-content content=htmlColors properties="@each"}}
 ```
 ```javascript
-model: [
+htmlColors: [
   ['00FFFF', 'Aqua'],
   ['FFE4B5', 'Moccasin'],
   ['708090', 'SlateGray']
@@ -98,10 +98,11 @@ model: [
 
 **Filter a nested array**
 ```handlebars
-{{filter-content content=model properties="title category.@each"}}
+{{filter-content content=daysOfChristmas properties="title category.@each"}}
 ```
 ```javascript
-model: [{
+daysOfChristmas: [{
+  number: 1,
   title: 'A Partridge in a Pear Tree',
   category: ['vegetation', 'food', 'avian']
 }]
@@ -109,10 +110,10 @@ model: [{
 
 **![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter arrays of arrays**
 ```handlebars
-{{filter-content content=model properties="@each.@each"}}
+{{filter-content content=yoDawg properties="@each.@each"}}
 ```
 ```javascript
-model: [[
+yoDawg: [[
   [1, 2, 3],
   ['A', 'B', 'C']
 ], [
@@ -121,16 +122,20 @@ model: [[
 ]]
 ```
 
-**Filter an object inside an array**
+**Filter an object within an array**
 ```handlebars
-{{filter-content content=model properties="bills.@each.name coins.@each.name"}}
+{{filter-content content=cashBack properties="bills.@each.name coins.@each.name"}}
 ```
 ```javascript
-model: [{
+cashBack: [{
   bills: [{
-    count: 4,
-    name: 'dollar bill'
+    count: 2,
+    name: 'one dollar bill'
     value: 100
+  }, {
+    count: 1,
+    name: 'two dollar bill'
+    value: 200
   }],
   coins: [{
     count: 2,
@@ -142,8 +147,8 @@ model: [{
 
 **Toggle `properties`' value with a button**
 ```handlebars
-{{#filter-content content=model properties=filterProperty as |fc|}}
-  <button {{action "tp"}}>Change filter type</button>
+{{#filter-content content=busiestAirports properties=filterProperty as |fc|}}
+  <button {{action "toggleFilterProperty"}}>Change filter type</button>
 {{/filter-content}}
 ```
 ```javascript
@@ -151,7 +156,7 @@ filterProperty: Ember.computed('filterToggle', function() {
   return this.get('filterToggle') ? 'name.longForm' : 'name.code';
 }),
 filterToggle: true,
-model: [{
+busiestAirports: [{
   name: {
     longForm: 'Hartsfield–Jackson Atlanta International Airport',
     code: 'ATL'
@@ -159,7 +164,7 @@ model: [{
   location: 'Atlanta, GA'
 }],
 actions: {
-  tp: function() {
+  toggleFilterProperty: function() {
     this.toggleProperty('filterToggle');
   }
 }
@@ -167,9 +172,9 @@ actions: {
 
 **Make the UI a little friendlier**
 ```handlebars
-{{#filter-content content=model properties="firstName" as |fc|}}
+{{#filter-content content=boardMembers properties="firstName" as |fc|}}
   <small>
-    Showing {{fc.model.length}}/{{fc.content.length}} people matching:
+    Showing {{fc.filteredContent.length}}/{{fc.content.length}} people matching:
     <strong>"{{fc.query}}"</strong>
   </small>
   {{! ... }}
@@ -187,16 +192,16 @@ actions: {
   - `query=sharedQuery` consume input from the external input field
 --}}
 
-{{#filter-content content=model.collectionA properties="name" query=sharedQuery showInput=false as |fc|}}
+{{#filter-content content=htmlColors.collectionA properties="name" query=sharedQuery showInput=false as |fc|}}
   {{! ... }}
 {{/filter-content}}
 
-{{#filter-content content=model.collectionB properties="name" query=sharedQuery showInput=false as |fc|}}
+{{#filter-content content=htmlColors.collectionB properties="name" query=sharedQuery showInput=false as |fc|}}
   {{! ... }}
 {{/filter-content}}
 ```
 ```javascript
-model: {
+htmlColors: {
   collectionA: [{
     // ...
   }],

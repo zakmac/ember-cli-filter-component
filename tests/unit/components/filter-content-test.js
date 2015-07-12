@@ -410,7 +410,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [{prop: 'valZ'}],
     'root level property');
 
@@ -423,7 +423,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [{prop: {prop: 'valY'}}],
     'nested property');
 
@@ -436,7 +436,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [['valX', 'valW', 'valV']],
     'root level array');
 
@@ -449,7 +449,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [{prop: ['valU', 'valT', 'valS']}],
     'nested array');
 
@@ -463,7 +463,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [[[1, 2, 3], ['A', 'B', 'C']]],
     'array of arrays');
 
@@ -476,7 +476,7 @@ test('component filters when type is array', function(assert) {
   });
 
   assert.deepEqual(
-    component.get('model'),
+    component.get('filteredContent'),
     [{prop: [{prop: 'valR'}, {prop: 'valQ'}, {prop: 'valP'}]}],
     'properties in a nested array');
 });
