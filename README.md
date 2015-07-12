@@ -5,7 +5,14 @@
 [![Test Coverage](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/coverage.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component/coverage)
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
-## About
+## Contents
+- <a href="#about">About</a>
+- <a href="#installation">Installation</a>
+- <a href="#usage">Usage</a>
+- <a href="#examples">Examples</a>
+- <a href="#contributing">Contributing</a>
+
+<a name="about"></a>## About
 
 Filter an array of items based on specified properties using a text input field.
 
@@ -13,14 +20,14 @@ Filter an array of items based on specified properties using a text input field.
 
 <img src="http://i.imgur.com/MiSiG2G.gif" width="300">
 
-## Installation
+<a name="installation"></a>## Installation
 
 ```shell
 cd /path/to/my-awesome-application
 ember install ember-cli-filter-component
 ```
 
-## Usage
+<a name="usage"></a>## Usage
 
 **content (req.)** – The array of items being filtered.
 
@@ -41,9 +48,18 @@ ember install ember-cli-filter-component
 **showInput** – Whether to show the filter query input field.
 - Defaults to `true`.
 
-## Examples
+<a name="examples"></a>## Examples
 
-**Dropping the component into an existing template**
+* <a href="#ex1">Dropping the component into an existing template</a>
+* <a href="#ex2">Filter an array</a>
+* <a href="#ex3">Filter a nested array</a>
+* <a href="#ex4">Filter arrays of arrays</a>
+* <a href="#ex5">Filter an object within an array</a>
+* <a href="#ex6">Toggle `properties`' value with a button</a>
+* <a href="#ex7">Add a showing/filtered count</a>
+* <a href="#ex8">Filter multiple components simultaneously</a>
+
+<a name="ex1"></a>**Dropping the component into an existing template**
 ```handlebars
 {{! original template }}
 <ul class="airports">
@@ -64,7 +80,7 @@ ember install ember-cli-filter-component
 {{/filter-content}}
 ```
 
-**Filter an array**
+<a name="ex2"></a>**Filter an array**
 ```handlebars
 {{! filter by a specific item }}
 {{filter-content content=htmlColors properties="1"}}
@@ -81,7 +97,7 @@ htmlColors: [
 ]
 ```
 
-**Filter a nested array**
+<a name="ex3"></a>**Filter a nested array**
 ```handlebars
 {{filter-content content=daysOfChristmas properties="title category.@each"}}
 ```
@@ -93,7 +109,7 @@ daysOfChristmas: [{
 }]
 ```
 
-**![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter arrays of arrays**
+<a name="ex4"></a>**![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter arrays of arrays**
 ```handlebars
 {{filter-content content=yoDawg properties="@each.@each"}}
 ```
@@ -107,7 +123,7 @@ yoDawg: [[
 ]]
 ```
 
-**Filter an object inside an array**
+<a name="ex5"></a>**Filter an object within an array**
 ```handlebars
 {{filter-content content=cashBack properties="bills.@each.name coins.@each.name"}}
 ```
@@ -130,7 +146,7 @@ cashBack: [{
 }]
 ```
 
-**Toggle `properties`' value with a button**
+<a name="ex6"></a>**Toggle `properties`' value with a button**
 ```handlebars
 {{#filter-content content=busiestAirports properties=filterProperty as |fc|}}
   <button {{action "toggleFilterProperty"}}>Change filter type</button>
@@ -155,7 +171,7 @@ actions: {
 }
 ```
 
-**Make the UI a little friendlier**
+<a name="ex7"></a>**Add a showing/filtered count**
 ```handlebars
 {{#filter-content content=boardMembers properties="firstName" as |fc|}}
   <small>
@@ -166,7 +182,7 @@ actions: {
 {{/filter-content}}
 ```
 
-**Filter on multiple components using a shared, external text input**
+<a name="ex8"></a>**Filter multiple components simultaneously**
 ```handlebars
 {{! this input's value is set to a property on the controller }}
 {{input value=sharedQuery}}
@@ -197,7 +213,7 @@ htmlColors: {
 sharedQuery: ''
 ```
 
-## Contributing
+<a name="contributing"></a>## Contributing
 
 The more the merrier. **Please submit any PRs against** [__the__ `feature` __branch__](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
 
