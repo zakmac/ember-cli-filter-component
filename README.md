@@ -49,7 +49,7 @@ ember install ember-cli-filter-component
 
 **Dropping the component into an existing template**
 ```handlebars
-{{! the original template }}
+{{! original template }}
 <ul class="airports">
   {{#each longList as |airport|}}
     <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
@@ -58,7 +58,7 @@ ember install ember-cli-filter-component
 ```
 
 ```handlebars
-{{! the new tempalte, using filter-content }}
+{{! new template using filter-content }}
 {{#filter-content content=longList properties="name.code name.longForm" as |fc|}}
   <ul class="airports">
     {{#each fc.model as |airport|}}
@@ -68,7 +68,7 @@ ember install ember-cli-filter-component
 {{/filter-content}}
 ```
 
-**Filter an array of strings**
+**Filter an array**
 ```handlebars
 {{! filter by a specific item }}
 {{filter-content content=model properties="1"}}
@@ -96,7 +96,7 @@ model: [{
 }]
 ```
 
-**![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter a arrays of arrays**
+**![yodawg](http://i.imgur.com/wkB6nwQ.png)Filter arrays of arrays**
 ```handlebars
 {{filter-content content=model properties="@each.@each"}}
 ```
