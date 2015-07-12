@@ -9,7 +9,7 @@
 - <a href="#user-content-about">About</a>
 - <a href="#user-content-installation">Installation</a>
 - <a href="#user-content-usage">Usage</a>
-- <a href="#user-content-examples">Examples</a>contributing
+- <a href="#user-content-examples">Examples</a>
 - <a href="#user-content-contributing">Contributing</a>
 
 ## About
