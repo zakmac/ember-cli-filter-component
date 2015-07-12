@@ -6,11 +6,11 @@
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
 ## Contents
-- <a href="#about">About</a>
-- <a href="#installation">Installation</a>
-- <a href="#usage">Usage</a>
-- <a href="#examples">Examples</a>contributing
-- <a href="#contributing">Contributing</a>
+- <a href="#user-content-about">About</a>
+- <a href="#user-content-installation">Installation</a>
+- <a href="#user-content-usage">Usage</a>
+- <a href="#user-content-examples">Examples</a>contributing
+- <a href="#user-content-contributing">Contributing</a>
 
 ## About
 
@@ -50,14 +50,14 @@ ember install ember-cli-filter-component
 
 ## Examples
 
-* <a href="#ex1">Dropping the component into an existing template</a>
-* <a href="#ex2">Filter an array</a>
-* <a href="#ex3">Filter a nested array</a>
-* <a href="#ex4">Filter arrays of arrays</a>
-* <a href="#ex5">Filter an object within an array</a>
-* <a href="#ex6">Toggle `properties`' value with a button</a>
-* <a href="#ex7">Add a showing/filtered count</a>
-* <a href="#ex8">Filter multiple components simultaneously</a>
+* <a href="#user-content-ex1">Dropping the component into an existing template</a>
+* <a href="#user-content-ex2">Filter an array</a>
+* <a href="#user-content-ex3">Filter a nested array</a>
+* <a href="#user-content-ex4">Filter arrays of arrays</a>
+* <a href="#user-content-ex5">Filter an object within an array</a>
+* <a href="#user-content-ex6">Toggle `properties`' value with a button</a>
+* <a href="#user-content-ex7">Add a showing/filtered count</a>
+* <a href="#user-content-ex8">Filter multiple components simultaneously</a>
 
 <a name="ex1"></a>**Dropping the component into an existing template**
 ```handlebars
