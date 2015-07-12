@@ -175,11 +175,7 @@ actions: {
     Showing {{fc.model.length}}/{{fc.content.length}} people matching:
     <strong>"{{fc.query}}"</strong>
   </small>
-  {{#each fc.model as |item|}}
-    {{! ... }}
-  {{else}}
-    {{! ... }}
-  {{/each}}
+  {{! ... }}
 {{/filter-content}}
 ```
 

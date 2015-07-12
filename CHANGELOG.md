@@ -3,7 +3,7 @@
 ### v1.2.0 (TBD)
 - [FEATURE] Filter query input can be disabled by setting `showInput=false`.
 - [BUGFIX] Ability to filter array of arrays.
-- [BUGFIX] `debounceFilter` was never "debouncing" due to the timeout set in `setFilterTimer` not being cancelled each time it was called.
+- [BUGFIX] `debounceFilter` was never "debouncing" due to the timeout set in `setFilterTimer` not being cancelled each time `setFilterTimer` was called.
 
 ### v1.1.1 (July 10, 2015)
 - [FEATURE] Filter query input placeholder text can now be specified.
