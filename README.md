@@ -6,6 +6,7 @@
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
 ## Contents
+- [**Live Demos**](http://www.zakmac.com/ember-demos/filter-content-component)
 - <a href="#user-content-about">About</a>
 - <a href="#user-content-installation">Installation</a>
 - <a href="#user-content-usage">Usage</a>
