@@ -7,7 +7,7 @@
 - <a href="#user-content-ex3">Filter a nested array</a>
 - <a href="#user-content-ex4">Filter arrays of arrays</a>
 - <a href="#user-content-ex5">Filter properties of an object within an array</a>
-- <a href="#user-content-ex7">Add a shown and/or hidden count</a>
+- <a href="#user-content-ex7">Add a shown and/or total count</a>
 - <a href="#user-content-ex8">Filter multiple components simultaneously</a>
 
 **Adapting an existing template**<a name="ex1"></a>
@@ -97,7 +97,7 @@ cashBack: [{
 }]
 ```
 
-**Add a shown and/or hidden count**<a name="ex7"></a>
+**Add a shown and/or total count**<a name="ex7"></a>
 ```handlebars
 {{#filter-content content=boardMembers properties="firstName" as |fc|}}
   <small>
