@@ -1,7 +1,7 @@
 # ember-cli-filter-component
 [![Code Climate](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/gpa.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-filter-component.svg)](http://emberobserver.com/addons/ember-cli-filter-component)
-[![Shields.io](https://img.shields.io/badge/tests-53%2F53-brightgreen.svg)](http://shields.io)
+[![Shields.io](https://img.shields.io/badge/tests-54%2F54-brightgreen.svg)](http://shields.io)
 [![Test Coverage](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/coverage.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component/coverage)
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
@@ -11,7 +11,7 @@ Filter an array of items based on specified properties using a text input field.
 
 `ember-cli-filter-component` provides a `{{filter-content}}` block component, inside which you can specify a template and access some useful properties.
 
-<center><img src="http://i.imgur.com/MiSiG2G.gif" width="300"></center>
+<img src="http://i.imgur.com/MiSiG2G.gif" width="300">
 
 ## Installation
 
@@ -43,6 +43,13 @@ ember install ember-cli-filter-component
 - Specify `@each` to iterate an array.
 ```handlebars
 {{filter-content properties="title category.@each"}}
+```
+
+**query** – The text string items on the passed model are matched against.
+
+**showInput** – Whether to show the filter query input field.
+```handlebars
+{{filter-content showInput=false}}
 ```
 
 ## Examples
@@ -79,9 +86,9 @@ ember install ember-cli-filter-component
 ```
 ```javascript
 model: [
-  [ '00FFFF', 'Aqua' ],
-  [ 'FFE4B5', 'Moccasin' ],
-  [ '708090', 'SlateGray' ]
+  ['00FFFF', 'Aqua'],
+  ['FFE4B5', 'Moccasin'],
+  ['708090', 'SlateGray']
 ]
 ```
 
@@ -91,8 +98,8 @@ model: [
 ```
 ```javascript
 model: [{
-  'title': 'A Partridge in a Pear Tree',
-  'category': ['vegetation', 'food', 'avian']
+  title: 'A Partridge in a Pear Tree',
+  category: ['vegetation', 'food', 'avian']
 }]
 ```
 
@@ -139,14 +146,14 @@ model: [{
 filterProperty: Ember.computed('filterToggle', function() {
   return this.get('filterToggle') ? 'name.longForm' : 'name.code';
 }),
-model: [{
-  "name": {
-    "longForm": "Hartsfield–Jackson Atlanta International Airport",
-    "code": "ATL"
-  },
-  "location": "Atlanta, GA"
-}],
 filterToggle: true,
+model: [{
+  name: {
+    longForm: 'Hartsfield–Jackson Atlanta International Airport',
+    code: 'ATL'
+  },
+  location: 'Atlanta, GA'
+}],
 actions: {
   tp: function() {
     this.toggleProperty('filterToggle');
@@ -162,11 +169,42 @@ actions: {
     <strong>"{{fc.query}}"</strong>
   </small>
   {{#each fc.model as |item|}}
-    {{! show filtered items }}
+    {{! ... }}
   {{else}}
-    {{! show no result message }}
+    {{! ... }}
   {{/each}}
 {{/filter-content}}
+```
+
+**Filter on multiple components using a shared, external text input**
+```handlebars
+{{! this input's value is set to a property on the controller }}
+{{input value=sharedQuery}}
+
+{{!--
+  the following two filter-content components are configured as follows:
+  - `showInput=false` disable the default filter query input
+  - `query=sharedQuery` consume input from the external input field
+--}}
+
+{{#filter-content content=model.collectionA properties="name" query=sharedQuery showInput=false as |fc|}}
+  {{! ... }}
+{{/filter-content}}
+
+{{#filter-content content=model.collectionB properties="name" query=sharedQuery showInput=false as |fc|}}
+  {{! ... }}
+{{/filter-content}}
+```
+```javascript
+model: {
+  collectionA: [{
+    // ...
+  }],
+  collectionB: [{
+    // ...
+  }]
+},
+sharedQuery: ''
 ```
 
 ## Contributing

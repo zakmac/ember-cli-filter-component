@@ -1,6 +1,11 @@
 # ember-cli-filter-component
 
-### v1.1.0 (July 10, 2015)
+### v1.2.0 (TBD)
+- [FEATURE] Filter query input can be disabled by setting `showInput=false`.
+- [BUGFIX] Ability to filter array of arrays.
+- [BUGFIX] `debounceFilter` was never "debouncing" due to the timeout set in `setFilterTimer` not being cancelled each time it was called.
+
+### v1.1.1 (July 10, 2015)
 - [FEATURE] Filter query input placeholder text can now be specified.
 - [FEATURE] Filter query input className can now be customized.
 - [BUGFIX] Initial filtering did not take place, disabling subsequent filtering.

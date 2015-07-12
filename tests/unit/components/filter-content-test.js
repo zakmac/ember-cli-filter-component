@@ -16,7 +16,7 @@ var typeEmberObj = Ember.Object.create({});
 
 test('initial component state', function(assert) {
 
-  assert.expect(10);
+  assert.expect(11);
 
   var component = this.subject();
 
@@ -50,6 +50,11 @@ test('initial component state', function(assert) {
     component.get('query'),
     '',
     '`query` has an initial value of ""');
+
+  assert.strictEqual(
+    component.get('showInput'),
+    true,
+    '`showInput` has an initial value of true');
 
   assert.deepEqual(
     component.get('contentComputed'),
