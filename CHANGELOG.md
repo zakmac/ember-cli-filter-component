@@ -1,10 +1,10 @@
 # ember-cli-filter-component
 
-### v2.0.0 (TBD)
+### v2.0.0 (July 12, 2015)
 - [BREAKING] `model` property has been deprecated in favor of `filteredContent` for the sake of common sense. This is a non-backwards compatible change.
 - [FEATURE] Filter query input can be disabled by setting `showInput=false`.
 - [BUGFIX] Ability to filter array of arrays.
-- [BUGFIX] `debounceFilter` was never "debouncing" due to the timeout set in `setFilterTimer` not being cancelled each time `setFilterTimer` was called.
+- [BUGFIX] `debounceFilter` was never debouncing due to the timeout set in `setFilterTimer` not being cancelled each time `setFilterTimer` was called.
 
 ### v1.1.1 (July 10, 2015)
 - [FEATURE] Filter query input placeholder text can now be specified.

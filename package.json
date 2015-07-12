@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "1.1.1",
-  "description": "A simple component used to filter an array based on user input.",
+  "version": "2.0.0",
+  "description": "An Ember.js component used to filter content based on user input.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -41,7 +41,10 @@
     "qunitjs": "^1.18.0"
   },
   "keywords": [
+    "component",
     "ember-addon",
+    "ember-cli",
+    "emberjs",
     "filter",
     "filter component",
     "inline filter",
