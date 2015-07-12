@@ -22,38 +22,23 @@ ember install ember-cli-filter-component
 
 ## Usage
 
-**content** – The array of items being filtered.
-- **Required!**
-```handlebars
-{{filter-content content=longList}}
-```
+**content (req.)** – The array of items being filtered.
 
 **inputClassNames** – Class names to append to the query input field.
-- _Optional_
 - Accepts a space-delimited string.
-```handlebars
-{{filter-content inputClassNames="all-caps monospaced"}}
-```
+- **ex:** `"all-caps monospaced"`
 
-**placeholder** – Placeholder copy for the text input field.
-- _Optional_
-```handlebars
-{{filter-content placeholder="Type here to filter..."}}
-```
+**placeholder** – Placeholder string for the text input field.
+- **ex:** `"Type here to filter..."`
 
-**properties** – Properties on each item to filter.
-- **Required!**
+**properties (req.)** – Properties on each item to filter.
 - Accepts a space-delimited string.
 - Specify `@each` to iterate an array.
-```handlebars
-{{filter-content properties="title category.@each"}}
-```
+- **ex:** `"title category.@each"`
 
 **query** – The text string items on `content` are matched against.
-- _Optional_
 
 **showInput** – Whether to show the filter query input field.
-- _Optional_
 - Defaults to `true`.
 
 ## Examples
@@ -122,7 +107,7 @@ yoDawg: [[
 ]]
 ```
 
-**Filter an object within an array**
+**Filter an object inside an array**
 ```handlebars
 {{filter-content content=cashBack properties="bills.@each.name coins.@each.name"}}
 ```
