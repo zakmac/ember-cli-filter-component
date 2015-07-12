@@ -9,10 +9,10 @@
 - <a href="#about">About</a>
 - <a href="#installation">Installation</a>
 - <a href="#usage">Usage</a>
-- <a href="#examples">Examples</a>
+- <a href="#examples">Examples</a>contributing
 - <a href="#contributing">Contributing</a>
 
-<a name="about"></a>## About
+## About
 
 Filter an array of items based on specified properties using a text input field.
 
@@ -20,14 +20,14 @@ Filter an array of items based on specified properties using a text input field.
 
 <img src="http://i.imgur.com/MiSiG2G.gif" width="300">
 
-<a name="installation"></a>## Installation
+## Installation
 
 ```shell
 cd /path/to/my-awesome-application
 ember install ember-cli-filter-component
 ```
 
-<a name="usage"></a>## Usage
+## Usage
 
 **content (req.)** – The array of items being filtered.
 
@@ -48,7 +48,7 @@ ember install ember-cli-filter-component
 **showInput** – Whether to show the filter query input field.
 - Defaults to `true`.
 
-<a name="examples"></a>## Examples
+## Examples
 
 * <a href="#ex1">Dropping the component into an existing template</a>
 * <a href="#ex2">Filter an array</a>
@@ -213,7 +213,7 @@ htmlColors: {
 sharedQuery: ''
 ```
 
-<a name="contributing"></a>## Contributing
+## Contributing
 
 The more the merrier. **Please submit any PRs against** [__the__ `feature` __branch__](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
 
