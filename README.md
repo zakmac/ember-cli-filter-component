@@ -23,22 +23,26 @@ ember install ember-cli-filter-component
 ## Usage
 
 **content** – The array of items being filtered.
+- **Required!**
 ```handlebars
 {{filter-content content=model}}
 ```
 
 **inputClassNames** – Class names to append to the query input field.
+- _Optional_
 - Accepts a space-delimited string.
 ```handlebars
 {{filter-content inputClassNames="outlined"}}
 ```
 
 **placeholder** – Placeholder copy for the text input field.
+- _Optional_
 ```handlebars
 {{filter-content placeholder="Type here to filter..."}}
 ```
 
 **properties** – Properties on each item to filter.
+- **Required!**
 - Accepts a space-delimited string.
 - Specify `@each` to iterate an array.
 ```handlebars
@@ -46,8 +50,11 @@ ember install ember-cli-filter-component
 ```
 
 **query** – The text string items on the passed model are matched against.
+- _Optional_
 
 **showInput** – Whether to show the filter query input field.
+- _Optional_
+- Defaults to `true`.
 ```handlebars
 {{filter-content showInput=false}}
 ```
