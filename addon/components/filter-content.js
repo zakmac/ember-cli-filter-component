@@ -75,6 +75,16 @@ export default Ember.Component.extend({
    */
   query: '',
 
+  /**
+   * showInput
+   *
+   * @description whether to show the query input field
+   * @memberof FilterContentComponent
+   * @type {string}
+   * @instance
+   */
+  showInput: true,
+
   /* computed properties
   ------------------------ */
 
@@ -250,6 +260,7 @@ export default Ember.Component.extend({
    */
   setFilterTimer: Ember.observer('contentComputed', 'queryComputed', function() {
 
+    Ember.run.cancel(this.get('debounceFilter'));
     this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 350));
   }),
 
