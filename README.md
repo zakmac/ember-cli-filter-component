@@ -1,4 +1,5 @@
 # ember-cli-filter-component
+
 [![Code Climate](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/gpa.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-filter-component.svg)](http://emberobserver.com/addons/ember-cli-filter-component)
 [![Shields.io](https://img.shields.io/badge/tests-54%2F54-brightgreen.svg)](http://shields.io)
@@ -6,7 +7,8 @@
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
 #### Table of Contents
-- [**Demos**](http://www.zakmac.com/ember-demos/filter-content-component) _- external link_
+
+- [Live Example](http://www.zakmac.com/ember-demos/filter-content-component) _- external link_
 - <a href="#user-content-about">About</a>
 - <a href="#user-content-installation">Installation</a>
 - <a href="#user-content-properties">Properties</a>
@@ -15,11 +17,11 @@
 
 ## About
 
+<table border="0" cellpadding="0"><tr><td>
 Filter an array of items based on specified properties using a text input.
 
 `ember-cli-filter-component` provides a `{{filter-content}}` block component, inside which you can specify a template and access some useful properties.
-
-<img src="http://i.imgur.com/MiSiG2G.gif" width="300">
+</td><td width="200"><img src="http://i.imgur.com/MiSiG2G.gif" width="200"></td></tr></table>
 
 ## Installation
 
@@ -30,50 +32,44 @@ ember install ember-cli-filter-component
 
 ## Properties
 
-### Parameters
-
 **content (req.)** `{array.<array, object, string>}`
-> Items being checked for matches against `query`
-
-**inputClassNames** `{string}`
-> Class names appended to the filter text input
-> - Space-delimited
-> - **ex:** `inputClassNames"all-caps monospaced"`
-
-**placeholder** `{string}`
-> Placeholder for the filter text input
-> - **ex:** `placeholder="Type here to filter..."`
-
-**properties (req.)** `{string}`
-> Properties on each item to filter
-> - Space-delimited
-> - Enumerables are represented using `@each`
-> - **ex:** `properties="title category.@each"`
-
-**query** `{string}`
-> Value used to match against items from `content`
-> - Set using the filter text input
-
-**showInput** `{boolean}`
-> Whether to show the filter text input
-> - Default: `true`
-
-### Properties
+- Items being checked for matches against `query`
 
 **filteredContent** `{array}`
-> Computed result of filtering items from `content` against `query`
+- Computed result of filtering items from `content` against `query`
 
+**inputClassNames** `{string}`
+- Class names appended to the filter text input
+  - Space-delimited
+  - **ex:** `inputClassNames"all-caps monospaced"`
 
-## Contributing
+**placeholder** `{string}`
+- Placeholder for the filter text input
+  - **ex:** `placeholder="Type here to filter..."`
 
-The more the merrier. **Please submit any PRs against** [__the__ `feature` __branch__](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
+**properties (req.)** `{string}`
+- Properties on each item to filter
+  - Space-delimited
+  - Enumerables are represented using `@each`
+  - **ex:** `properties="title category.@each"`
+
+**query** `{string}`
+- Value used to match against items from `content`
+  - Set using the filter text input
+
+**showInput** `{boolean}`
+- Whether to show the filter text input
+
+## Contributing / Modifying
+
+Clone the project and do what you want with it. If you're feeling generous submit a PR [against the `feature` branch (GitHub)](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
 
 ```shell
 cd /path/to/projects
 git clone git@github.com:zakmac/ember-cli-filter-component.git
 ```
 
---- 
+---
 <small>
 For more information on using **ember-cli**, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).<br>
 For more information on **Ember.js**, visit [http://www.emberjs.com/](http://www.emberjs.com/).<br>
