@@ -13,7 +13,7 @@
 - <a href="#user-content-installation">Installation</a>
 - <a href="#user-content-properties">Properties</a>
 - Example Code _- available in EXAMPLES.md_
-- <a href="#user-content-contributing">Contributing</a>
+- <a href="#user-content-contributing-modifying">Contributing</a>
 
 ## About
 
