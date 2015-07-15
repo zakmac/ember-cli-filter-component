@@ -25,6 +25,20 @@ export default Ember.Component.extend({
   classNames: ['filter-content'],
 
   /**
+   * component
+   *
+   * @description a reference to the component to match deprecation with yield
+   *   being passed `controller` or `view`
+   * @memberof FilterContentComponent
+   * @type {Ember.Component}
+   * @instance
+   */
+  component: Ember.computed(function() {
+
+    return this;
+  }),
+
+  /**
    * content
    *
    * @description the content passed in to be filtered
