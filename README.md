@@ -17,7 +17,7 @@
 
 ## About
 
-<table border="0" cellpadding="0"><tr><td>*ember-cli-filter-component* provides a `{{filter-content}}` block component. The component filters an array of items based on specified properties using a text input field. The input field can also be disabled to allow for alternative filter input methods.</td><td width="200"><img src="http://i.imgur.com/MiSiG2G.gif" width="200"></td></tr></table>
+<table border="0" cellpadding="0"><tr><td><strong>ember-cli-filter-component</strong> provides a <code>{{filter-content}}</code> block component. The component filters an array of items based on specified properties using a text input field. The input field can also be disabled to allow for alternative filter input methods.</td><td width="200"><img src="http://i.imgur.com/MiSiG2G.gif" width="200"></td></tr></table>
 
 ## Installation
 
