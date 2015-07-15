@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "An Ember.js component used to filter content based on user input.",
   "directories": {
     "doc": "doc",
