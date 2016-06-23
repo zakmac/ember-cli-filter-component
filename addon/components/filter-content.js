@@ -310,6 +310,7 @@ export default Ember.Component.extend({
 
     // iterate each item passed in `content`
     filteredItems = this.get('contentComputed').filter(function(item) {
+
       compareItems = [];
 
       // check each specified property for a match
