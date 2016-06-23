@@ -123,7 +123,8 @@ export default Ember.Component.extend({
   contentComputed: Ember.computed('content', function() {
 
     var content = !Ember.isNone(this.get('content')) ? this.get('content') : [];
-    var type = Ember.typeOf(content);
+    // First check if it's an Ember Data Collection
+    var type = Ember.typeOf(content.content) || Ember.typeOf(content);
 
     try {
 
