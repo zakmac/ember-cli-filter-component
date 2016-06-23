@@ -1,5 +1,8 @@
 # ember-cli-filter-component
 
+### v2.0.2 (July 22, 2016)
+- #7 [BUGFIX] remove references to EnumerableUtils @jgadbois
+
 ### v2.0.1 (July 15, 2015)
 - Added property `component` to satisfy block param deprecation warnings regarding use of `component` in yield.
 
