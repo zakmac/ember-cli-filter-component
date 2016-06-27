@@ -33,6 +33,10 @@ export default Ember.Component.extend({
    */
   debounceFilter: null,
 
+  /**
+   * @name        layout
+   * @description component layout
+   */
   layout,
 
   /**
@@ -49,6 +53,9 @@ export default Ember.Component.extend({
    * @type        {string}
    */
   query: '',
+
+  /* computed
+  ------------------------ */
 
   /**
    * @name        filterableProperties
