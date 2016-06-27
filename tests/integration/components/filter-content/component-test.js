@@ -55,7 +55,7 @@ test ('it renders with content', function (assert) {
   this.set ('contentData', data[0]);
 
   this.render (hbs`
-    {{#filter-content content=contentData properties="@each" as |filtered query|}}
+    {{#filter-content content=contentData as |filtered query|}}
       {{#each filtered as |f i|~}}
         {{~if i ", "~}}{{~f~}}
       {{~else}}
@@ -65,7 +65,6 @@ test ('it renders with content', function (assert) {
   `);
 
   assert.equal (this.$ ().text ().trim (), data[0].join (', '));
-  // assert.equal (this.$ ().text ().trim (), data[1].map (d => d.name).join (', '));
 });
 
 test ('it filters by property index', function (assert) {

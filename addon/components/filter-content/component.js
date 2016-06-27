@@ -1,5 +1,5 @@
 import Ember from 'ember';
-// import layout from './template';
+import layout from './template';
 
 /**
  * @name        FilterContentComponent
@@ -32,6 +32,8 @@ export default Ember.Component.extend({
    * @type        {Ember.run.later}
    */
   debounceFilter: null,
+
+  layout,
 
   /**
    * @name        properties
@@ -211,7 +213,6 @@ export default Ember.Component.extend({
 
     this._super ();
     this.applyFilter ();
-    // this.set('filteredContent', this.get ('content'));
   },
 
   /**
