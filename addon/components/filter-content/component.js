@@ -174,7 +174,7 @@ export default Ember.Component.extend({
    * @param       {string} property dot notated index
    * @returns     {array} an array of values matching `property`'s index
    */
-  getContentProps (item, property) {
+  getContentProps (item, property, inception = 0) {
 
     try {
 
@@ -187,14 +187,25 @@ export default Ember.Component.extend({
 
       prop = propArr.shift ();
 
+      // get array items
       if (prop === '@each') {
 
-        item.forEach (i => values = values.concat (propArr.length ? this.getContentProps (i, propArr.join('.')) : i));
+        // if @each is the only property and we are not incepted...
+        if (!propArr.length && inception === 0) {
 
+          values = values.concat (item);
+
+        // if the item is eachable...
+        } else if (item.forEach) {
+
+          item.forEach (i => values = values.concat (propArr.length ? this.getContentProps (i, propArr.join ('.'), ++inception) : i));
+        }
+
+      // get item property
       } else {
 
         z = Ember.get (item, prop) || [];
-        values = values.concat (propArr.length ? this.getContentProps (z, propArr.join('.')) : z);
+        values = values.concat (propArr.length ? this.getContentProps (z, propArr.join ('.'), ++inception) : z);
       }
 
       return values && !!values.length ? values : [];
