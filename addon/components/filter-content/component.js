@@ -26,6 +26,8 @@ export default Ember.Component.extend({
    */
   content: [],
 
+  layout,
+
   /**
    * @name        properties
    * @description a space-delimited string of dot-notated properties to match
@@ -80,7 +82,7 @@ export default Ember.Component.extend({
 
     } catch (exception) {
 
-      if (window.console) { window.console.error ('applyFilter', exception) }
+      if (window.console) { window.console.error ('applyFilter', exception); }
     }
   },
 
@@ -120,7 +122,7 @@ export default Ember.Component.extend({
 
     } catch (exception) {
 
-      if (window.console) { window.console.error ('getContentProps', exception) }
+      if (window.console) { window.console.error ('getContentProps', exception); }
     }
   },
 
@@ -146,7 +148,7 @@ export default Ember.Component.extend({
 
       } catch (exception) {
 
-        if (window.console) { window.console.error ('normalizedProperties', exception) }
+        if (window.console) { window.console.error ('normalizedProperties', exception); }
       }
   },
 
