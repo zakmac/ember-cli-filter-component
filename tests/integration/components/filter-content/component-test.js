@@ -1,13 +1,13 @@
-import DS from 'ember-data';
+// import DS from 'ember-data';
 import Ember from 'ember';
-import {
-  moduleForComponent,
-  test
-} from 'ember-qunit';
+import { moduleForComponent, test } from 'ember-qunit';
+import hbs from 'htmlbars-inline-precompile';
 
-moduleForComponent('filter-content', {});
+moduleForComponent('filter-content', 'Integration | Component | filter content', {
+  integration: true
+});
 
-var typeEmberDSObj = DS.Model.extend({});
+// var typeEmberDSObj = DS.Model.extend({});
 var typeEmberArr = Ember.ArrayProxy.create({ content: Ember.A([]) });
 var typeEmberObj = Ember.Object.create({});
 
@@ -480,3 +480,23 @@ test('component filters when type is array', function(assert) {
     [{prop: [{prop: 'valR'}, {prop: 'valQ'}, {prop: 'valP'}]}],
     'properties in a nested array');
 });
+
+
+//
+// test('it renders', function(assert) {
+//   // Set any properties with this.set('myProperty', 'value');
+//   // Handle any actions with this.on('myAction', function(val) { ... });
+//
+//   this.render(hbs`{{filter-content}}`);
+//
+//   assert.equal(this.$().text().trim(), '');
+//
+//   // Template block usage:
+//   this.render(hbs`
+//     {{#filter-content}}
+//       template block text
+//     {{/filter-content}}
+//   `);
+//
+//   assert.equal(this.$().text().trim(), 'template block text');
+// });

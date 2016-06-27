@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import layout from './template';
 
 /**
  * FilterContentComponent
@@ -10,6 +11,8 @@ import Ember from 'ember';
  * @constructor
  */
 export default Ember.Component.extend({
+
+  layout,
 
   /* properties
   ------------------------ */
