@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import layout from './template';
+// import layout from './template';
 
 /**
  * @name        FilterContentComponent
@@ -22,11 +22,16 @@ export default Ember.Component.extend({
   /**
    * @name        content
    * @description the content passed in to be filtered
-   * @type        {(array|object|Ember.Object|Ember.Enumerable|DS.Model)}
+   * @type        {(array|object|Ember.Object)}
    */
   content: [],
 
-  layout,
+  /**
+   * @name        debounceFilter
+   * @description timer handling debouncing `applyFilter()`, set by `setFilterTimer()`
+   * @type        {Ember.run.later}
+   */
+  debounceFilter: null,
 
   /**
    * @name        properties
@@ -43,15 +48,89 @@ export default Ember.Component.extend({
    */
   query: '',
 
+  /**
+   * @name        filterableProperties
+   * @description normalize `properties` and return them as an array
+   * @returns     {array} an array of normalized property indices
+   */
+  normalizedProperties: Ember.computed ('query', 'properties', function () {
+
+    try {
+
+      var properties = this.get ('properties') || '';
+
+      return !properties ? [] : properties
+        // replace invalid characters
+        .replace(/[^\w\s\@\.\-]+/g, '')
+        // replace multiple periods with single periods
+        .replace(/[\.]{2,}/g, '.')
+        // normalize delimiter to single spaces
+        .replace(/(\.+)?\s\1?/g, ' ')
+        .split(/\s/g);
+
+      } catch (exception) {
+
+        if (window.console) { window.console.error ('normalizedProperties', exception); }
+      }
+  }),
+
+  /**
+   * @name        queryComputed
+   * @description the string being matched against 'contentComputed' replaces
+   *              forward slashes to prevent error
+   * @returns     {string}
+   * @todo        is there a better solution for forward slashes?
+   */
+  normalizedQuery: Ember.computed('query', function () {
+
+    try {
+
+      var query = this.get ('query');
+
+      return Ember.isPresent(query) ? query.replace(/\\+/g, '') : '';
+
+    } catch (exception) {
+
+      if (window.console) { window.console.error ('normalizedQuery', exception); }
+    }
+  }),
+
+  /* observers
+  ------------------------ */
+
+  /**
+   * @name        setFilterTimer
+   * @description an observer that passes `debounceFilter` to `Ember.run.later`
+   */
+  setFilterTimer: Ember.observer('content', 'normalizedProperties', 'normalizedQuery', function () {
+
+    try {
+
+      Ember.run.cancel(this.get('debounceFilter'));
+      this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 420));
+
+    } catch (exception) {
+
+      if (window.console) { window.console.error ('setFilterTimer', exception); }
+    }
+  }),
+
+  /* methods
+  ------------------------ */
+
+  /**
+   * @name        applyFilter
+   * @description filters for `query` against value(s) of `properties` in `content`
+   */
   applyFilter () {
 
     try {
 
       var content = this.get ('content') || [];
       var matched = false;
-      var properties = this.normalizeProperties ();
+      var properties = this.get ('normalizedProperties') || [];
       var propertiesTmp = [];
-      var query = this.get ('normalizedQuery') || null;
+      var query = this.get ('normalizedQuery') || '';
       var values = [];
 
       if (!content || !properties) { return content ? content : []; }
@@ -90,12 +169,10 @@ export default Ember.Component.extend({
    * @name        getContentProps
    * @description returns an array of values from `item` at dot notated `property`
    * @param       {(array|object)} item
-   * @param       {(string)} property dot notated index
+   * @param       {string} property dot notated index
    * @returns     {array} an array of values matching `property`'s index
    */
   getContentProps (item, property) {
-
-    // console.log('getContentProps', property, item);
 
     try {
 
@@ -127,87 +204,6 @@ export default Ember.Component.extend({
   },
 
   /**
-   * @name        filterableProperties
-   * @description normalize `properties` and return them as an array
-   * @returns     {array}
-   */
-  normalizeProperties () {
-
-    try {
-
-      var properties = this.get ('properties') || '';
-
-      return !properties ? [] : properties
-        // replace invalid characters
-        .replace(/[^\w\s\@\.\-]+/g, '')
-        // replace multiple periods with single periods
-        .replace(/[\.]{2,}/g, '.')
-        // normalize delimiter to single spaces
-        .replace(/(\.+)?\s\1?/g, ' ')
-        .split(/\s/g);
-
-      } catch (exception) {
-
-        if (window.console) { window.console.error ('normalizedProperties', exception); }
-      }
-  },
-
-  /**
-   * queryComputed
-   *
-   * @description the string being matched against 'contentComputed' replaces
-   *   forward slashes to prevent error
-   * @todo is there a better solution for forward slashes?
-   * @memberof FilterContentComponent
-   * @returns {string}
-   * @instance
-   */
-  normalizedQuery: Ember.computed('query', function() {
-
-    try {
-
-      var query = this.get ('query');
-
-      return Ember.isPresent(query) ? query.replace(/\\+/g, '') : '';
-
-    } catch (exception) {
-
-      if (window.console) { window.console.error ('normalizedQuery', exception); }
-    }
-  }),
-
-  /* observers
-  ------------------------ */
-
-  /**
-   * debounceFilter
-   *
-   * @description an `Ember.run.later` timer that handles debouncing `applyFilter()`,
-   *   set by `setFilterTimer()`
-   * @memberof FilterContentComponent
-   * @type {string}
-   * @instance
-   */
-  debounceFilter: null,
-
-  /**
-   * setFilterTimer
-   *
-   * @description an observer that sets `debounceFilter` to an `Ember.run.later`
-   *   instance
-   * @memberof FilterContentComponent
-   * @instance
-   */
-  setFilterTimer: Ember.observer('content', 'normalizedProperties', 'normalizedQuery', function() {
-
-    Ember.run.cancel(this.get('debounceFilter'));
-    this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 350));
-  }),
-
-  /* methods
-  ------------------------ */
-
-  /**
    * @name        init
    * @description n/a
    */
@@ -215,6 +211,7 @@ export default Ember.Component.extend({
 
     this._super ();
     this.applyFilter ();
+    // this.set('filteredContent', this.get ('content'));
   },
 
   /**
@@ -229,23 +226,28 @@ export default Ember.Component.extend({
    */
   isMatch (valueA, valueB) {
 
-    // console.log('ismatch', valueA, valueB);
+    try {
 
-    var matched = false;
-    var typeA = Ember.typeOf (valueA);
-    var typeB = Ember.typeOf (valueB);
+      var matched = false;
+      var typeA = Ember.typeOf (valueA);
+      var typeB = Ember.typeOf (valueB);
 
-    typeA = (typeA === 'undefined' || typeA === 'null' || typeA === 'number' || typeA === 'string' || typeA === 'boolean');
-    typeB = (typeB === 'undefined' || typeB === 'null' || typeB === 'number' || typeB === 'string' || typeB === 'boolean');
+      typeA = (typeA === 'undefined' || typeA === 'null' || typeA === 'number' || typeA === 'string' || typeA === 'boolean');
+      typeB = (typeB === 'undefined' || typeB === 'null' || typeB === 'number' || typeB === 'string' || typeB === 'boolean');
 
-    if (typeA && typeB) {
+      if (typeA && typeB) {
 
-      valueA = Ember.inspect (valueA).toLowerCase ();
-      valueB = Ember.inspect (valueB).toLowerCase ();
-      matched = (valueA.match (valueB) !== null);
+        valueA = Ember.inspect (valueA).toLowerCase ();
+        valueB = Ember.inspect (valueB).toLowerCase ();
+        matched = (valueA.match (valueB) !== null);
+      }
+
+      return matched;
+
+    } catch (exception) {
+
+      if (window.console) { window.console.error ('isMatch', exception); }
     }
-
-    return matched;
   },
 
   /**
@@ -256,6 +258,6 @@ export default Ember.Component.extend({
   willDestroy () {
 
     this._super ();
-    this.set ('debounceFilter', null);
+    Ember.run.cancel(this.get('debounceFilter'));
   }
 });
