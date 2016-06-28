@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-filter-component",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "3.0.0",
+  "description": "An Ember.js component used to filter content based on user input.",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -11,11 +11,14 @@
     "start": "ember server",
     "test": "ember try:each"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zakmac/ember-cli-filter-component"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Zak MacDonald",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
@@ -40,7 +43,16 @@
     "loader.js": "^4.0.1"
   },
   "keywords": [
-    "ember-addon"
+    "component",
+    "ember",
+    "ember-addon",
+    "ember-cli",
+    "embercli",
+    "emberjs",
+    "filter",
+    "inline",
+    "search",
+    "simple"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6",
