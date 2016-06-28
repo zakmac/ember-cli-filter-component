@@ -1,7 +1,17 @@
 # ember-cli-filter-component
 
+### v3.0.0 (wip)
+- [ENHANCEMENT] Remove text input field linked to `query` from component template.
+  - Remove `inputClassNames` property.
+  - Remove `placeholder` property.
+  - Remove `showInput` property.
+- [INTERNAL] Changes to `applyFilter` and subsequent methods, in an effort to simplify the code base.
+- [BUGFIX] Tests could fail sporadically due to a bug in `willDestroy()` teardown.
+- [DOCS] Updated README.md
+- [DOCS] Updated EXAMPLES.md
+
 ### v2.0.2 (July 22, 2016)
-- #7 [BUGFIX] remove references to EnumerableUtils @jgadbois
+- \#7 [BUGFIX] remove references to EnumerableUtils @jgadbois
 
 ### v2.0.1 (July 15, 2015)
 - Added property `component` to satisfy block param deprecation warnings regarding use of `component` in yield.

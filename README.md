@@ -13,7 +13,7 @@
 - <a href="#user-content-installation">Installation</a>
 - <a href="#user-content-properties">Properties</a>
 - Example Code _- available in EXAMPLES.md_
-- <a href="#user-content-contributing-modifying">Contributing</a>
+- <a href="#user-content-contributing">Contributing</a>
 
 ## About
 
@@ -22,28 +22,20 @@
 ## Installation
 
 ```shell
-cd /path/to/my-awesome-application
+# add to an existing ember-cli project
+cd /path/to/projects/cool-project
 ember install ember-cli-filter-component
 ```
 
 ## Properties
 
-**content (req.)** `{array.<array, object, string>}`
+**content (required)** `{array.<array, object, string>}`
 - Items being checked for matches against `query`
 
-**filteredContent** `{array}`
+**filteredContent (read-only)** `{array}`
 - Computed result of filtering items from `content` against `query`
 
-**inputClassNames** `{string}`
-- Class names appended to the filter text input
-  - Space-delimited
-  - **ex:** `inputClassNames"all-caps monospaced"`
-
-**placeholder** `{string}`
-- Placeholder for the filter text input
-  - **ex:** `placeholder="Type here to filter..."`
-
-**properties (req.)** `{string}`
+**properties (required)** `{string}`
 - Properties on each item to filter
   - Space-delimited
   - Enumerables are represented using `@each`
@@ -51,24 +43,47 @@ ember install ember-cli-filter-component
 
 **query** `{string}`
 - Value used to match against items from `content`
-  - Set using the filter text input
 
-**showInput** `{boolean}`
-- Whether to show the filter text input
 
-## Contributing / Modifying
+## Contributing
 
-Clone the project and do what you want with it. If you're feeling generous submit a PR [against the `feature` branch (GitHub)](https://github.com/zakmac/ember-cli-filter-component/tree/feature)**.**
+To start developing/testing locally, clone the project repo.
 
 ```shell
+# clone the repo
 cd /path/to/projects
 git clone git@github.com:zakmac/ember-cli-filter-component.git
 ```
 
+If you're feeling generous [submit a pull request (GitHub)](https://github.com/zakmac/ember-cli-filter-component)**.**
+
+
+### Development
+
+Once cloned, you can start editing and testing in the project folder itself, or
+include the addon in another project via `npm link`
+
+```shell
+# create an npm link
+cd /path/to/projects/ember-cli-filter-component
+npm link
+
+# include the link in your project
+cd /path/to/projects/cool-project
+npm link ember-cli-filter-component
+```
+
+The last step is to add `"ember-cli-filter-component": ""` to the `devDependencies` section of your project's `package.json`.
+
+Next time your project is run, the `filter-content` component will be accessible.
+
+
+## Testing
+
+The command `ember test` will run the test suite via CLI, outputting results. You can also run `ember serve` and visit [http://localhost:4200/tests](http://localhost:4200/tests) to see qUnit output in the browser.
+
 ---
 <small>
 For more information on using **ember-cli**, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).<br>
-For more information on **Ember.js**, visit [http://www.emberjs.com/](http://www.emberjs.com/).<br>
-Looking for more great Ember addons? Check out [http://www.emberobserver.com/](http://www.emberobserver.com/).<br>
-Check out the Ember.js IRC channel at `#emberjs` on **Freenode IRC** or join the [Ember Community Slack organization](https://ember-community-slackin.herokuapp.com/).
+For more information on **Ember.js**, visit [http://www.emberjs.com/](http://www.emberjs.com/).
 </small>
