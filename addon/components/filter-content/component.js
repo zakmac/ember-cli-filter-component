@@ -22,7 +22,7 @@ export default Ember.Component.extend({
   /**
    * @name        content
    * @description the content passed in to be filtered
-   * @type        {(array|object|Ember.Object)}
+   * @type        {(array|object)}
    */
   content: [],
 
