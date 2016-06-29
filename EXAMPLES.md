@@ -1,8 +1,19 @@
 # ember-cli-filter-component examples
 
-**Adapting an existing template**
+### Table of contents
+
+* Adapting an existing template
+* Filter an array
+* Filter a nested array
+* Filter arrays of arrays
+* Filter properties of an object within an array
+* Add a shown and/or total count
+* Filter multiple components simultaneously
+
+## Adapting an existing template
+
+**Existing**
 ```handlebars
-{{! original }}
 <ul class="airports">
   {{#each busiestAirports as |airport|}}
     <li>{{airport.name.code}} – {{airport.name.longForm}}</li>
@@ -10,8 +21,8 @@
 </ul>
 ```
 
+**Updated**
 ```handlebars
-{{! updated }}
 {{#filter-content content=busiestAirports properties="name.code name.longForm" as |filtered query|}}
   {{input value=query}}
   <ul class="airports">
@@ -22,12 +33,13 @@
 {{/filter-content}}
 ```
 
-**Filter an array**
+
+## Filter an array
 
 ```handlebars
-{{! all indices }}
 {{filter-content content=htmlColors properties="@each"}}
 ```
+
 ```javascript
 htmlColors: [
   ['00FFFF', 'Aqua'],
@@ -36,10 +48,13 @@ htmlColors: [
 ]
 ```
 
-**Filter a nested array**
+
+## Filter a nested array
+
 ```handlebars
 {{filter-content content=daysOfChristmas properties="title category.@each"}}
 ```
+
 ```javascript
 daysOfChristmas: [
   {
@@ -50,10 +65,13 @@ daysOfChristmas: [
 ]
 ```
 
-**Filter arrays of arrays ![yodawg](http://i.imgur.com/wkB6nwQ.png)**
+
+## Filter arrays of arrays ![yodawg](http://i.imgur.com/wkB6nwQ.png)
+
 ```handlebars
 {{filter-content content=yoDawg properties="@each.@each"}}
 ```
+
 ```javascript
 yoDawg: [
   [
@@ -66,10 +84,13 @@ yoDawg: [
 ]
 ```
 
-**Filter properties of an object within an array**
+
+## Filter properties of an object within an array
+
 ```handlebars
 {{filter-content content=cashBack properties="bills.@each.name coins.@each.name"}}
 ```
+
 ```javascript
 cashBack: [
   {
@@ -95,19 +116,23 @@ cashBack: [
 ]
 ```
 
-**Add a shown and/or total count**
+
+## Add a shown and/or total count
+
 ```handlebars
 {{#filter-content content=boardMembers properties="firstName" as |filtered query|}}
   {{input value=query}}
   <small>
-    Showing {{filtered.length}}/{{content.length}} people matching:
-    <strong>"{{query}}"</strong>
+    Showing {{concat filtered.length "/" boardMembers.length}} people matching:
+    <strong>{{concat "\"" query "\""}}</strong>
   </small>
   {{! ... }}
 {{/filter-content}}
 ```
 
-**Filter multiple components simultaneously**
+
+## Filter multiple components simultaneously
+
 ```handlebars
 {{input value=sharedQuery}}
 
@@ -119,10 +144,10 @@ cashBack: [
   {{! ... }}
 {{/filter-content}}
 ```
+
 ```javascript
 htmlColors: {
-  collectionA: [{ /* .. */ }],
+  collectionA: [{ /* ... */ }],
   collectionB: [{ /* ... */ }]
-},
-sharedQuery: ''
+}
 ```

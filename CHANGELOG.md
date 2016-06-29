@@ -5,6 +5,7 @@
   - Remove `inputClassNames` property.
   - Remove `placeholder` property.
   - Remove `showInput` property.
+- [ENHANCEMENT] Added `timeout` property, which enables specifying in milliseconds how long the debounce timer for `applyFilter` is.
 - [INTERNAL] Changes to `applyFilter` and subsequent methods, in an effort to simplify the code base.
 - [BUGFIX] Tests could fail sporadically due to a bug in `willDestroy()` teardown.
 - [DOCS] Updated README.md
