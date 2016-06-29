@@ -69,7 +69,7 @@ export default Ember.Component.extend({
    * @description normalize `properties` and return them as an array
    * @returns     {array} an array of normalized property indices
    */
-  normalizedProperties: Ember.computed ('query', 'properties', function () {
+  normalizedProperties: Ember.computed ('properties', function () {
 
     try {
 
@@ -77,12 +77,14 @@ export default Ember.Component.extend({
 
       return !properties ? [] : properties
         // replace invalid characters
-        .replace(/[^\w\s\@\.\-]+/g, '')
+        .replace (/[^\w\s\@\.\-]+/g, '')
         // replace multiple periods with single periods
-        .replace(/[\.]{2,}/g, '.')
+        .replace (/[\.]{2,}/g, '.')
         // normalize delimiter to single spaces
-        .replace(/(\.+)?\s\1?/g, ' ')
-        .split(/\s/g);
+        .replace (/(\.+)?\s\1?/g, ' ')
+        .split (/\s+/g)
+        // remove empty items
+        .filter (z => z !== '');
 
       } catch (exception) {
 
