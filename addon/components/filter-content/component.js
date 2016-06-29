@@ -28,7 +28,7 @@ export default Ember.Component.extend({
 
   /**
    * @name        debounceFilter
-   * @description timer handling debouncing `applyFilter()`, set by `setFilterTimer()`
+   * @description debounced call to `applyFilter`
    * @type        {Ember.run.later}
    */
   debounceFilter: null,
@@ -53,6 +53,13 @@ export default Ember.Component.extend({
    * @type        {string}
    */
   query: '',
+
+  /**
+   * @name        timeout
+   * @description time in milliseconds to debounce `applyFilter`
+   * @type        {(number|string)}
+   */
+  timeout: 420,
 
   /* computed
   ------------------------ */
@@ -111,12 +118,12 @@ export default Ember.Component.extend({
    * @name        setFilterTimer
    * @description an observer that passes `debounceFilter` to `Ember.run.later`
    */
-  setFilterTimer: Ember.observer('content', 'normalizedProperties', 'normalizedQuery', function () {
+  setFilterTimer: Ember.observer ('content', 'normalizedProperties', 'normalizedQuery', function () {
 
     try {
 
-      Ember.run.cancel(this.get('debounceFilter'));
-      this.set('debounceFilter', Ember.run.later(this, this.applyFilter, 420));
+      // Ember.run.cancel (this.get ('debounceFilter'));
+      Ember.run.debounce (this, this.applyFilter, Number.parseInt (this.get ('timeout'), 10), false);
 
     } catch (exception) {
 
@@ -277,6 +284,6 @@ export default Ember.Component.extend({
   willDestroy () {
 
     this._super ();
-    Ember.run.cancel(this.get('debounceFilter'));
+    Ember.run.cancel (this.get ('debounceFilter'));
   }
 });
