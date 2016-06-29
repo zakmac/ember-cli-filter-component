@@ -262,7 +262,7 @@ export default Ember.Component.extend({
 
         valueA = Ember.inspect (valueA).toLowerCase ();
         valueB = Ember.inspect (valueB).toLowerCase ();
-        matched = (valueA.match (valueB) !== null);
+        matched = valueA.match (valueB) !== null;
       }
 
       return matched;
