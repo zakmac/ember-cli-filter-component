@@ -200,19 +200,14 @@ export default Ember.Component.extend({
       var z = [];
 
       if (!propArr.length) { return []; }
+      if (inception > 100) { throw `recursing too far, limit is 100 levels`; }
 
       prop = propArr.shift ();
 
       // get array items
       if (prop === '@each') {
 
-        // if @each is the only property and we are not incepted...
-        if (!propArr.length && inception === 0) {
-
-          values = values.concat (item);
-
-        // if the item is eachable...
-        } else if (item.forEach) {
+        if (item.forEach) {
 
           item.forEach (i => values = values.concat (propArr.length ? this.getContentProps (i, propArr.join ('.'), ++inception) : i));
         }
