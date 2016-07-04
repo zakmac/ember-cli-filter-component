@@ -137,6 +137,34 @@ export default Ember.Component.extend({
   ------------------------ */
 
   /**
+   * @name        aContainsB
+   * @description checks if a contains a match for b; passed values are sloppily
+   *              coerced to strings
+   * @param       {(number|string)} a
+   * @param       {(number|string)} b
+   * @returns     {boolean} whether there was a match between the passed values
+   */
+  aContainsB (a, b) {
+
+    try {
+
+      var matched = false;
+      var matchTypes = ['boolean', 'number', 'string'];
+
+      if (matchTypes.indexOf (Ember.typeOf (a)) !== -1 && matchTypes.indexOf (Ember.typeOf (b)) !== -1) {
+
+        matched = Ember.inspect (a).toLowerCase ().match (Ember.inspect (b).toLowerCase ()) !== null;
+      }
+
+      return matched;
+
+    } catch (exception) {
+
+      if (window.console) { window.console.error ('aContainsB', exception); }
+    }
+  },
+
+  /**
    * @name        applyFilter
    * @description filters for `query` against value(s) of `properties` in `content`
    */
@@ -167,7 +195,7 @@ export default Ember.Component.extend({
 
           while (matched === false && values.length) {
 
-            matched = this.isMatch(values.shift (), query) ? true : false;
+            matched = this.aContainsB(values.shift (), query) ? true : false;
           }
 
           values = [];
@@ -235,42 +263,6 @@ export default Ember.Component.extend({
 
     this._super ();
     this.applyFilter ();
-  },
-
-  /**
-   * @name        isMatch
-   * @todo        seems like this would fail if either value was 'false', should
-   *              probably fix this if that's the case...
-   * @description checks if valueA and valueB match; passed values are sloppily
-   *              coerced to strings
-   * @param       {(number|string)} valueA
-   * @param       {(number|string)} valueA
-   * @returns     {boolean} whether there was a match between the passed values
-   */
-  isMatch (valueA, valueB) {
-
-    try {
-
-      var matched = false;
-      var typeA = Ember.typeOf (valueA);
-      var typeB = Ember.typeOf (valueB);
-
-      typeA = (typeA === 'undefined' || typeA === 'null' || typeA === 'number' || typeA === 'string' || typeA === 'boolean');
-      typeB = (typeB === 'undefined' || typeB === 'null' || typeB === 'number' || typeB === 'string' || typeB === 'boolean');
-
-      if (typeA && typeB) {
-
-        valueA = Ember.inspect (valueA).toLowerCase ();
-        valueB = Ember.inspect (valueB).toLowerCase ();
-        matched = valueA.match (valueB) !== null;
-      }
-
-      return matched;
-
-    } catch (exception) {
-
-      if (window.console) { window.console.error ('isMatch', exception); }
-    }
   },
 
   /**
