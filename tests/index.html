@@ -28,6 +28,10 @@
     <script src="assets/tests.js"></script>
     <script src="assets/test-loader.js"></script>
 
+    <script>
+      QUnit.config.testTimeout = 30000;
+    </script>
+
     {{content-for "body-footer"}}
     {{content-for "test-body-footer"}}
   </body>

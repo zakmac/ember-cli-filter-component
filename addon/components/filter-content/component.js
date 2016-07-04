@@ -125,7 +125,7 @@ export default Ember.Component.extend({
     try {
 
       // Ember.run.cancel (this.get ('debounceFilter'));
-      Ember.run.debounce (this, this.applyFilter, Number.parseInt (this.get ('timeout'), 10), false);
+      this.set('debounceFilter', Ember.run.debounce (this, this.applyFilter, Number.parseInt (this.get ('timeout'), 10), false));
 
     } catch (exception) {
 
