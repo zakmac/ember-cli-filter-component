@@ -8,6 +8,7 @@
 - [ENHANCEMENT] Added `timeout` property, which enables specifying in milliseconds how long the debounce timer for `applyFilter` is.
 - [INTERNAL] Changes to `applyFilter` and subsequent methods, in an effort to simplify the code base.
 - [BUGFIX] Tests could fail sporadically due to a bug in `willDestroy()` teardown.
+- [BREAKING] Block parameters have changed, see README.md for details.
 - [DOCS] Updated README.md
 - [DOCS] Updated EXAMPLES.md
 

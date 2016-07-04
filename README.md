@@ -2,7 +2,7 @@
 
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-filter-component.svg)](http://emberobserver.com/addons/ember-cli-filter-component)
 [![Shields.io](https://img.shields.io/badge/tests-11%2F11-brightgreen.svg)](http://shields.io)
-[![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=v3.0.0)](https://travis-ci.org/zakmac/ember-cli-filter-component)
+[![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
 
 ### Table of Contents
@@ -54,7 +54,7 @@ ember install ember-cli-filter-component
 
 **filtered** `{array}`
 - **Description**<br>Computed result of filtering items from `content` against `query`
-- **Note**<br>assed as the first block param to the component yield
+- **Note**<br>Passed as the first block param to the component yield
 
 **query** `{string}`
 - **Description**<br>Value matched against items from `content`
