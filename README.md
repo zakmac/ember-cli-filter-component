@@ -1,9 +1,7 @@
 # ember-cli-filter-component
 
-[![Code Climate](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/gpa.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-filter-component.svg)](http://emberobserver.com/addons/ember-cli-filter-component)
-[![Shields.io](https://img.shields.io/badge/tests-54%2F54-brightgreen.svg)](http://shields.io)
-[![Test Coverage](https://codeclimate.com/github/zakmac/ember-cli-filter-component/badges/coverage.svg)](https://codeclimate.com/github/zakmac/ember-cli-filter-component/coverage)
+[![Shields.io](https://img.shields.io/badge/tests-11%2F11-brightgreen.svg)](http://shields.io)
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=v3.0.0)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
 
