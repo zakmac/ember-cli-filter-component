@@ -156,7 +156,7 @@ test ('normalizedQuery normalizes', function (assert) {
   assert.deepEqual (subject.get ('normalizedQuery'), 'test !@#$%^&*()_+-=,./<>?;\':"[]{} value');
 });
 
-test ('isMatch matches', function (assert) {
+test ('aContainsB functions', function (assert) {
 
   assert.expect (4);
 
@@ -164,17 +164,17 @@ test ('isMatch matches', function (assert) {
 
   // matches
 
-  assert.ok (subject.isMatch ('matches', 'matches'));
+  assert.ok (subject.aContainsB ('matches', 'matches'));
 
   // matches regardless of case
 
-  assert.ok (subject.isMatch ('MATCHES', 'matches'));
+  assert.ok (subject.aContainsB ('MATCHES', 'matches'));
 
   // matches contain spaces
 
-  assert.ok (subject.isMatch ('m A t C h E s', 'M a T c H e S'));
+  assert.ok (subject.aContainsB ('m A t C h E s', 'M a T c H e S'));
 
-  // mismatches are detected
+  // maContainsBes are detected
 
-  assert.notOk (subject.isMatch ('will not', 'match'));
+  assert.notOk (subject.aContainsB ('will not', 'match'));
 });
