@@ -4,7 +4,6 @@
 [![Shields.io](https://img.shields.io/badge/tests-11%2F11-brightgreen.svg)](http://shields.io)
 [![Build Status](https://travis-ci.org/zakmac/ember-cli-filter-component.svg?branch=feature)](https://travis-ci.org/zakmac/ember-cli-filter-component)
 
-
 ### Table of Contents
 - About
 - Installation
@@ -15,7 +14,6 @@
 - Development
   - Link `ember-cli-filter-component` to your project
   - Running tests
-
 
 ## About
 
