@@ -133,7 +133,7 @@ test ('normalizedQuery normalizes', function (assert) {
 
   assert.expect (2);
 
-  var subject = this.subject();
+  var subject = this.subject ();
 
   // removes backslashes
 
@@ -160,7 +160,7 @@ test ('aContainsB functions', function (assert) {
 
   assert.expect (4);
 
-  var subject = this.subject();
+  var subject = this.subject ();
 
   // matches
 
@@ -174,7 +174,7 @@ test ('aContainsB functions', function (assert) {
 
   assert.ok (subject.aContainsB ('m A t C h E s', 'M a T c H e S'));
 
-  // maContainsBes are detected
+  // mismatches are detected
 
   assert.notOk (subject.aContainsB ('will not', 'match'));
 });

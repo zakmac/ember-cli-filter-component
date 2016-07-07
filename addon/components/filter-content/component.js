@@ -7,7 +7,7 @@ import layout from './template';
  *              based on basic matching
  * @extends     external:Ember.Component
  */
-export default Ember.Component.extend({
+export default Ember.Component.extend ({
 
   /* properties
   ------------------------ */
@@ -99,13 +99,13 @@ export default Ember.Component.extend({
    * @returns     {string}
    * @todo        is there a better solution for forward slashes?
    */
-  normalizedQuery: Ember.computed('query', function () {
+  normalizedQuery: Ember.computed ('query', function () {
 
     try {
 
       var query = this.get ('query');
 
-      return Ember.isPresent(query) ? query.replace(/\\+/g, '') : '';
+      return Ember.isPresent (query) ? query.replace (/\\+/g, '') : '';
 
     } catch (exception) {
 
@@ -125,7 +125,7 @@ export default Ember.Component.extend({
     try {
 
       // Ember.run.cancel (this.get ('debounceFilter'));
-      this.set('debounceFilter', Ember.run.debounce (this, this.applyFilter, Number.parseInt (this.get ('timeout'), 10), false));
+      this.set ('debounceFilter', Ember.run.debounce (this, this.applyFilter, Number.parseInt (this.get ('timeout'), 10), false));
 
     } catch (exception) {
 
@@ -195,15 +195,16 @@ export default Ember.Component.extend({
 
           while (matched === false && values.length) {
 
-            matched = this.aContainsB(values.shift (), query) ? true : false;
+            matched = this.aContainsB (values.shift (), query) ? true : false;
           }
 
           values = [];
+
           return matched;
         });
       }
 
-      this.set('filteredContent', content);
+      this.set ('filteredContent', content);
 
     } catch (exception) {
 
