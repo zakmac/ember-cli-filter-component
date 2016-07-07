@@ -2,7 +2,7 @@
 
 ### Table of contents
 
-* Upgrading a `filter-content` ~v2.0.0 template
+* Upgrading a `filter-content` v2.0.0 template
 * Adapting an existing template
 * Filter an array
 * Filter a nested array
@@ -11,13 +11,13 @@
 * Add a shown and/or total count
 * Filter multiple components simultaneously
 
-## Upgrading a `filter-content` ~v2.0.0 template
+## Upgrading a `filter-content` v2.0.0 template
 
 **Note:**
 * The block parameters have changed
 * The query input is no longer automatically included in the template
 
-**~v2.0.0 template**
+**v2.0.0 template**
 ```handlebars
 {{#filter-content content=airports properties="name.code name.longForm" placeholder="filter by airport name or code" inputClassNames="form-control" as |fc|}}
   <small class="{{if fc.query '' 'invisible'}}">
