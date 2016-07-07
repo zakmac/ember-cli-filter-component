@@ -2,6 +2,7 @@
 
 ### Table of contents
 
+* Upgrading a `filter-content` ~v2.0.0 template
 * Adapting an existing template
 * Filter an array
 * Filter a nested array
@@ -9,6 +10,47 @@
 * Filter properties of an object within an array
 * Add a shown and/or total count
 * Filter multiple components simultaneously
+
+## Upgrading a `filter-content` ~v2.0.0 template
+
+**Note:**
+* The block parameters have changed
+* The query input is no longer automatically included in the template
+
+**~v2.0.0 template**
+```handlebars
+{{#filter-content content=airports properties="name.code name.longForm" placeholder="filter by airport name or code" inputClassNames="form-control" as |fc|}}
+  <small class="{{if fc.query '' 'invisible'}}">
+    Showing {{fc.filteredContent.length}}/{{fc.content.length}} airports matching
+    <strong>"{{fc.query}}"</strong>
+  </small>
+  <table>
+    <tbody>
+      {{#each fc.filteredContent as |airport|}}
+        {{! ... }}
+      {{/each}}
+    </tbody>
+  </table>
+{{/filter-content}}
+```
+
+**v3.0.0 template**
+```handlebars
+{{#filter-content content=airports properties="name.code name.longForm" as |filteredAirports query|}}
+  {{input value=query class="form-control" placeholder="filter by airport name or code"}}
+  <small class="{{if query '' 'invisible'}}">
+    Showing {{filteredAirports.length}}/{{airports.length}} airports matching
+    <strong>"{{query}}"</strong>
+  </small>
+  <table>
+    <tbody>
+      {{#each filteredAirports as |airport|}}
+        {{! ... }}
+      {{/each}}
+    </tbody>
+  </table>
+{{/filter-content}}
+```
 
 ## Adapting an existing template
 

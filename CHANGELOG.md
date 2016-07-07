@@ -1,6 +1,6 @@
 # ember-cli-filter-component
 
-### v3.0.0 (July 4, 2016)
+### v3.0.0 (July 6, 2016)
 - [ENHANCEMENT] Remove text input field linked to `query` from component template.
   - Remove `inputClassNames` property.
   - Remove `placeholder` property.

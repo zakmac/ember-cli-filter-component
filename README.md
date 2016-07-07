@@ -11,7 +11,7 @@
 - Usage
   - Sample template
   - Block parameters
-  - Template properties
+  - Properties
 - Development
   - Link `ember-cli-filter-component` to your project
   - Running tests
@@ -19,7 +19,7 @@
 
 ## About
 
-**ember-cli-filter-component** provides a `{{filter-content}}` block component. The component filters an array of items based on specified properties against a text query.
+**ember-cli-filter-component** provides a `{{filter-content}}` block component for filtering arrays of items.
 
 - [Live example](http://www.zak.xxx/ember-demos/filter-content-component) _- external link_
 - Sample code _- available in EXAMPLES.md_
@@ -60,7 +60,7 @@ ember install ember-cli-filter-component
 - **Description**<br>Value matched against items from `content`
 - **Note**<br>Passed as the second block param to the component yield
 
-### Template properties
+### Properties
 
 **content** (required) `{array.<array, object>}`
 - **Description**<br>Items being checked for matches against `query`
@@ -98,7 +98,7 @@ Once cloned, you can start editing and testing in the project folder itself, or 
 cd /path/to/projects/ember-cli-filter-component
 npm link
 
-# include the npm link in another
+# include the npm link in your project
 cd /path/to/projects/cool-project
 npm link ember-cli-filter-component
 ```
