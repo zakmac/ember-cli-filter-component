@@ -1,5 +1,8 @@
 # ember-cli-filter-component
 
+### v3.0.1 (November 7, 2016)
+- \#14 [BUGFIX] Change reference for `Number.parseInt` to global `parseInt` in order to resolve issue with `Number` object in Internet Explorer @jduuuubs
+
 ### v3.0.0 (July 6, 2016)
 - [ENHANCEMENT] Remove text input field linked to `query` from component template.
   - Remove `inputClassNames` property.

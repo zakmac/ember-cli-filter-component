@@ -21,6 +21,7 @@
 
 - [Live example](http://www.zak.xxx/ember-demos/filter-content-component) _- external link_
 - Sample code _- available in EXAMPLES.md_
+- Changelog _- available in CHANGELOG.md_
 
 
 ## Installation
